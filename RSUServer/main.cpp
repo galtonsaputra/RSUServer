@@ -81,7 +81,6 @@ int main()
 		"Client connected...";
 
 	//Start a thread to READ raw bits
-
 	std::thread processor = std::thread 
 		{ SocketConnection::ReadClient, sc._wifiConnection.socket, sc.fileDes[1]};
 	//sc.StartThread();
@@ -90,8 +89,7 @@ int main()
 	// Handles CTRL^C for process termination
 	signal(SIGINT, my_function);
 	while (!flag) {
-		//std::cout << 
-			//"Client sending data now hopefully...";
+		std::cout << "Client speed reading receive ...";
 		sc.ReadPipeToProcessMessage(sc.fileDes[0]);
 		//std::thread readingMsg { sc.ReadPipeToProcessMessage, sc.fileDes[0] };
 		std::cin;
