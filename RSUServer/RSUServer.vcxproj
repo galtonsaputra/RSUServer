@@ -1,0 +1,647 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{edc131f5-bbe8-464d-a4c4-376cbd2686fd}</ProjectGuid>
+    <Keyword>Linux</Keyword>
+    <RootNamespace>RSUServer</RootNamespace>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <ApplicationType>Linux</ApplicationType>
+    <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
+    <TargetLinuxPlatform>Generic</TargetLinuxPlatform>
+    <LinuxProjectType>{D51BCBC9-82E9-4017-911E-C93873C4EA2B}</LinuxProjectType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <IncludePath>C:\Users\galton.saputra\Documents\Visual Studio 2017\Projects\RSUServer\RSUServer\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SocketConnection.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Acceleration.h" />
+    <ClInclude Include="include\AccelerationConfidence.h" />
+    <ClInclude Include="include\AccelerationSet4Way.h" />
+    <ClInclude Include="include\AccelSteerYawRateConfidence.h" />
+    <ClInclude Include="include\AddGrpB_Angle.h" />
+    <ClInclude Include="include\AddGrpB_Elevation.h" />
+    <ClInclude Include="include\AddGrpB_MsgCount.h" />
+    <ClInclude Include="include\AddGrpB_TimeMark.h" />
+    <ClInclude Include="include\AdvisorySpeed.h" />
+    <ClInclude Include="include\AdvisorySpeedList.h" />
+    <ClInclude Include="include\AdvisorySpeedType.h" />
+    <ClInclude Include="include\AllowedManeuvers.h" />
+    <ClInclude Include="include\Altitude.h" />
+    <ClInclude Include="include\AltitudeConfidence.h" />
+    <ClInclude Include="include\AltitudeValue.h" />
+    <ClInclude Include="include\AmbientAirPressure.h" />
+    <ClInclude Include="include\AmbientAirTemperature.h" />
+    <ClInclude Include="include\AnimalPropelledType.h" />
+    <ClInclude Include="include\AnimalType.h" />
+    <ClInclude Include="include\AntennaOffsetSet.h" />
+    <ClInclude Include="include\AntiLockBrakeStatus.h" />
+    <ClInclude Include="include\ANY.h" />
+    <ClInclude Include="include\ApproachID.h" />
+    <ClInclude Include="include\ApproachOrLane.h" />
+    <ClInclude Include="include\asn_application.h" />
+    <ClInclude Include="include\asn_bit_data.h" />
+    <ClInclude Include="include\asn_codecs.h" />
+    <ClInclude Include="include\asn_codecs_prim.h" />
+    <ClInclude Include="include\asn_internal.h" />
+    <ClInclude Include="include\asn_ioc.h" />
+    <ClInclude Include="include\asn_random_fill.h" />
+    <ClInclude Include="include\asn_SEQUENCE_OF.h" />
+    <ClInclude Include="include\asn_SET_OF.h" />
+    <ClInclude Include="include\asn_system.h" />
+    <ClInclude Include="include\Attachment.h" />
+    <ClInclude Include="include\AttachmentRadius.h" />
+    <ClInclude Include="include\AuxiliaryBrakeStatus.h" />
+    <ClInclude Include="include\AxleLocation.h" />
+    <ClInclude Include="include\AxleWeight.h" />
+    <ClInclude Include="include\AxleWeightList.h" />
+    <ClInclude Include="include\AxleWeightSet.h" />
+    <ClInclude Include="include\BasicSafetyMessage.h" />
+    <ClInclude Include="include\BasicVehicleClass.h" />
+    <ClInclude Include="include\BasicVehicleRole.h" />
+    <ClInclude Include="include\ber_decoder.h" />
+    <ClInclude Include="include\ber_tlv_length.h" />
+    <ClInclude Include="include\ber_tlv_tag.h" />
+    <ClInclude Include="include\BIT_STRING.h" />
+    <ClInclude Include="include\Bluetooth.h" />
+    <ClInclude Include="include\BOOLEAN.h" />
+    <ClInclude Include="include\BrakeAppliedPressure.h" />
+    <ClInclude Include="include\BrakeAppliedStatus.h" />
+    <ClInclude Include="include\BrakeBoostApplied.h" />
+    <ClInclude Include="include\BrakeSystemStatus.h" />
+    <ClInclude Include="include\BSMcoreData.h" />
+    <ClInclude Include="include\BumperHeight.h" />
+    <ClInclude Include="include\BumperHeights.h" />
+    <ClInclude Include="include\CargoWeight.h" />
+    <ClInclude Include="include\Circle.h" />
+    <ClInclude Include="include\CoarseHeading.h" />
+    <ClInclude Include="include\CodeWord.h" />
+    <ClInclude Include="include\CoefficientOfFriction.h" />
+    <ClInclude Include="include\CommonSafetyRequest.h" />
+    <ClInclude Include="include\Component.h" />
+    <ClInclude Include="include\ComputedLane.h" />
+    <ClInclude Include="include\ConcurrentQueue.h" />
+    <ClInclude Include="include\Confidence.h" />
+    <ClInclude Include="include\ConfidenceSet.h" />
+    <ClInclude Include="include\ConnectingLane.h" />
+    <ClInclude Include="include\Connection.h" />
+    <ClInclude Include="include\ConnectionManeuverAssist-addGrpC.h" />
+    <ClInclude Include="include\ConnectionManeuverAssist.h" />
+    <ClInclude Include="include\ConnectsToList.h" />
+    <ClInclude Include="include\constraints.h" />
+    <ClInclude Include="include\constr_CHOICE.h" />
+    <ClInclude Include="include\constr_SEQUENCE.h" />
+    <ClInclude Include="include\constr_SEQUENCE_OF.h" />
+    <ClInclude Include="include\constr_SET_OF.h" />
+    <ClInclude Include="include\constr_TYPE.h" />
+    <ClInclude Include="include\Count.h" />
+    <ClInclude Include="include\CrossPlatformI2C.h" />
+    <ClInclude Include="include\CrossPlatformI2C_Core.h" />
+    <ClInclude Include="include\DataParameters.h" />
+    <ClInclude Include="include\Day.h" />
+    <ClInclude Include="include\DayOfWeek.h" />
+    <ClInclude Include="include\DDate.h" />
+    <ClInclude Include="include\DDateTime.h" />
+    <ClInclude Include="include\DDay.h" />
+    <ClInclude Include="include\DegreesLat.h" />
+    <ClInclude Include="include\DegreesLong.h" />
+    <ClInclude Include="include\DeltaAngle.h" />
+    <ClInclude Include="include\DeltaTime.h" />
+    <ClInclude Include="include\der_encoder.h" />
+    <ClInclude Include="include\DescriptiveName.h" />
+    <ClInclude Include="include\DFullTime.h" />
+    <ClInclude Include="include\DHour.h" />
+    <ClInclude Include="include\DirectionOfUse.h" />
+    <ClInclude Include="include\DisabledVehicle.h" />
+    <ClInclude Include="include\DistanceUnits.h" />
+    <ClInclude Include="include\DMinute.h" />
+    <ClInclude Include="include\DMonth.h" />
+    <ClInclude Include="include\DMonthDay.h" />
+    <ClInclude Include="include\DOffset.h" />
+    <ClInclude Include="include\DriveAxleLiftAirPressure.h" />
+    <ClInclude Include="include\DriveAxleLocation.h" />
+    <ClInclude Include="include\DriveAxleLubePressure.h" />
+    <ClInclude Include="include\DriveAxleTemperature.h" />
+    <ClInclude Include="include\DrivenLineOffsetLg.h" />
+    <ClInclude Include="include\DrivenLineOffsetSm.h" />
+    <ClInclude Include="include\DrivingWheelAngle.h" />
+    <ClInclude Include="include\DSecond.h" />
+    <ClInclude Include="include\DSRCmsgID.h" />
+    <ClInclude Include="include\DSRC_Angle.h" />
+    <ClInclude Include="include\DSRC_Elevation.h" />
+    <ClInclude Include="include\DSRC_MsgCount.h" />
+    <ClInclude Include="include\DSRC_TimeMark.h" />
+    <ClInclude Include="include\DTime.h" />
+    <ClInclude Include="include\Duration.h" />
+    <ClInclude Include="include\DYear.h" />
+    <ClInclude Include="include\DYearMonth.h" />
+    <ClInclude Include="include\ElevationConfidence.h" />
+    <ClInclude Include="include\EmergencyDetails.h" />
+    <ClInclude Include="include\EmergencyVehicleAlert.h" />
+    <ClInclude Include="include\EmissionType.h" />
+    <ClInclude Include="include\EnabledLaneList.h" />
+    <ClInclude Include="include\EssMobileFriction.h" />
+    <ClInclude Include="include\EssPrecipRate.h" />
+    <ClInclude Include="include\EssPrecipSituation.h" />
+    <ClInclude Include="include\EssPrecipYesNo.h" />
+    <ClInclude Include="include\EssSolarRadiation.h" />
+    <ClInclude Include="include\EventDescription.h" />
+    <ClInclude Include="include\ExitService.h" />
+    <ClInclude Include="include\Extent.h" />
+    <ClInclude Include="include\ExteriorLights.h" />
+    <ClInclude Include="include\FuelType.h" />
+    <ClInclude Include="include\FullPositionVector.h" />
+    <ClInclude Include="include\FurtherInfoID.h" />
+    <ClInclude Include="include\GenericLane.h" />
+    <ClInclude Include="include\GenericLocations.h" />
+    <ClInclude Include="include\GenericSignage.h" />
+    <ClInclude Include="include\GeographicalPath.h" />
+    <ClInclude Include="include\GeometricProjection.h" />
+    <ClInclude Include="include\GNSSstatus.h" />
+    <ClInclude Include="include\GrossDistance.h" />
+    <ClInclude Include="include\GrossSpeed.h" />
+    <ClInclude Include="include\Header.h" />
+    <ClInclude Include="include\Heading.h" />
+    <ClInclude Include="include\HeadingConfidence.h" />
+    <ClInclude Include="include\HeadingSlice.h" />
+    <ClInclude Include="include\Holiday.h" />
+    <ClInclude Include="include\Hour.h" />
+    <ClInclude Include="include\HumanPropelledType.h" />
+    <ClInclude Include="include\IA5String.h" />
+    <ClInclude Include="include\IncidentResponseEquipment.h" />
+    <ClInclude Include="include\INTEGER.h" />
+    <ClInclude Include="include\IntersectionAccessPoint.h" />
+    <ClInclude Include="include\IntersectionCollision.h" />
+    <ClInclude Include="include\IntersectionGeometry.h" />
+    <ClInclude Include="include\IntersectionGeometryList.h" />
+    <ClInclude Include="include\IntersectionID.h" />
+    <ClInclude Include="include\IntersectionReferenceID.h" />
+    <ClInclude Include="include\IntersectionState-addGrpC.h" />
+    <ClInclude Include="include\IntersectionState.h" />
+    <ClInclude Include="include\IntersectionStateList.h" />
+    <ClInclude Include="include\IntersectionStatusObject.h" />
+    <ClInclude Include="include\IsDolly.h" />
+    <ClInclude Include="include\Iso3833VehicleType.h" />
+    <ClInclude Include="include\ITIScodes.h" />
+    <ClInclude Include="include\ITIScodesAndText.h" />
+    <ClInclude Include="include\ITIStext.h" />
+    <ClInclude Include="include\ITIStextPhrase.h" />
+    <ClInclude Include="include\J1939data.h" />
+    <ClInclude Include="include\LaneAttributes-Barrier.h" />
+    <ClInclude Include="include\LaneAttributes-Bike.h" />
+    <ClInclude Include="include\LaneAttributes-Crosswalk.h" />
+    <ClInclude Include="include\LaneAttributes-Parking.h" />
+    <ClInclude Include="include\LaneAttributes-Sidewalk.h" />
+    <ClInclude Include="include\LaneAttributes-Striping.h" />
+    <ClInclude Include="include\LaneAttributes-TrackedVehicle.h" />
+    <ClInclude Include="include\LaneAttributes-Vehicle.h" />
+    <ClInclude Include="include\LaneAttributes.h" />
+    <ClInclude Include="include\LaneConnectionID.h" />
+    <ClInclude Include="include\LaneDataAttribute-addGrpB.h" />
+    <ClInclude Include="include\LaneDataAttribute.h" />
+    <ClInclude Include="include\LaneDataAttributeList.h" />
+    <ClInclude Include="include\LaneDirection.h" />
+    <ClInclude Include="include\LaneID.h" />
+    <ClInclude Include="include\LaneList.h" />
+    <ClInclude Include="include\LaneSharing.h" />
+    <ClInclude Include="include\LaneTypeAttributes.h" />
+    <ClInclude Include="include\LaneWidth.h" />
+    <ClInclude Include="include\Latitude.h" />
+    <ClInclude Include="include\LatitudeDMS.h" />
+    <ClInclude Include="include\LatitudeDMS2.h" />
+    <ClInclude Include="include\LayerID.h" />
+    <ClInclude Include="include\LayerType.h" />
+    <ClInclude Include="include\LightbarInUse.h" />
+    <ClInclude Include="include\LinkedList.h" />
+    <ClInclude Include="include\Location-quality.h" />
+    <ClInclude Include="include\Location-tech.h" />
+    <ClInclude Include="include\Longitude.h" />
+    <ClInclude Include="include\LongitudeDMS.h" />
+    <ClInclude Include="include\LongitudeDMS2.h" />
+    <ClInclude Include="include\ManeuverAssistList.h" />
+    <ClInclude Include="include\MapData-addGrpC.h" />
+    <ClInclude Include="include\MapData.h" />
+    <ClInclude Include="include\MaxTimetoChange.h" />
+    <ClInclude Include="include\MergeDivergeNodeAngle.h" />
+    <ClInclude Include="include\MessageBLOB.h" />
+    <ClInclude Include="include\MessageFrame.h" />
+    <ClInclude Include="include\MinTimetoChange.h" />
+    <ClInclude Include="include\Minute.h" />
+    <ClInclude Include="include\MinuteOfTheYear.h" />
+    <ClInclude Include="include\MinutesAngle.h" />
+    <ClInclude Include="include\MinutesDuration.h" />
+    <ClInclude Include="include\Month.h" />
+    <ClInclude Include="include\MotorizedPropelledType.h" />
+    <ClInclude Include="include\MovementEvent-addGrpB.h" />
+    <ClInclude Include="include\MovementEvent.h" />
+    <ClInclude Include="include\MovementEventList.h" />
+    <ClInclude Include="include\MovementList.h" />
+    <ClInclude Include="include\MovementPhaseState.h" />
+    <ClInclude Include="include\MovementState.h" />
+    <ClInclude Include="include\MPU.h" />
+    <ClInclude Include="include\MPU6000.h" />
+    <ClInclude Include="include\MPU6050.h" />
+    <ClInclude Include="include\MPU6500.h" />
+    <ClInclude Include="include\MPU6x00.h" />
+    <ClInclude Include="include\MPU6xx0.h" />
+    <ClInclude Include="include\MPU9250.h" />
+    <ClInclude Include="include\MPU9250_Master.h" />
+    <ClInclude Include="include\MPU9250_Master_I2C.h" />
+    <ClInclude Include="include\MPU9250_Passthru.h" />
+    <ClInclude Include="include\MsgCRC.h" />
+    <ClInclude Include="include\MultiVehicleResponse.h" />
+    <ClInclude Include="include\MUTCDCode.h" />
+    <ClInclude Include="include\NativeEnumerated.h" />
+    <ClInclude Include="include\NativeInteger.h" />
+    <ClInclude Include="include\NMEA-MsgType.h" />
+    <ClInclude Include="include\NMEA-Payload.h" />
+    <ClInclude Include="include\NMEA-Revision.h" />
+    <ClInclude Include="include\NMEAcorrections.h" />
+    <ClInclude Include="include\Node-LL-24B.h" />
+    <ClInclude Include="include\Node-LL-28B.h" />
+    <ClInclude Include="include\Node-LL-32B.h" />
+    <ClInclude Include="include\Node-LL-36B.h" />
+    <ClInclude Include="include\Node-LL-44B.h" />
+    <ClInclude Include="include\Node-LL-48B.h" />
+    <ClInclude Include="include\Node-LLdms-48b.h" />
+    <ClInclude Include="include\Node-LLdms-80b.h" />
+    <ClInclude Include="include\Node-LLmD-64b.h" />
+    <ClInclude Include="include\Node-XY-20b.h" />
+    <ClInclude Include="include\Node-XY-22b.h" />
+    <ClInclude Include="include\Node-XY-24b.h" />
+    <ClInclude Include="include\Node-XY-26b.h" />
+    <ClInclude Include="include\Node-XY-28b.h" />
+    <ClInclude Include="include\Node-XY-32b.h" />
+    <ClInclude Include="include\NodeAttributeLL.h" />
+    <ClInclude Include="include\NodeAttributeLLList.h" />
+    <ClInclude Include="include\NodeAttributeSetLL.h" />
+    <ClInclude Include="include\NodeAttributeSetXY.h" />
+    <ClInclude Include="include\NodeAttributeXY.h" />
+    <ClInclude Include="include\NodeAttributeXYList.h" />
+    <ClInclude Include="include\NodeListLL.h" />
+    <ClInclude Include="include\NodeListXY.h" />
+    <ClInclude Include="include\NodeLL.h" />
+    <ClInclude Include="include\NodeOffsetPointLL.h" />
+    <ClInclude Include="include\NodeOffsetPointXY-addGrpB.h" />
+    <ClInclude Include="include\NodeOffsetPointXY.h" />
+    <ClInclude Include="include\NodeSetLL.h" />
+    <ClInclude Include="include\NodeSetXY.h" />
+    <ClInclude Include="include\NodeXY.h" />
+    <ClInclude Include="include\NumberOfParticipantsInCluster.h" />
+    <ClInclude Include="include\ObjectCount.h" />
+    <ClInclude Include="include\ObstacleDetection.h" />
+    <ClInclude Include="include\ObstacleDirection.h" />
+    <ClInclude Include="include\ObstacleDistance.h" />
+    <ClInclude Include="include\OCTET_STRING.h" />
+    <ClInclude Include="include\oer_decoder.h" />
+    <ClInclude Include="include\oer_encoder.h" />
+    <ClInclude Include="include\oer_support.h" />
+    <ClInclude Include="include\Offset-B09.h" />
+    <ClInclude Include="include\Offset-B10.h" />
+    <ClInclude Include="include\Offset-B11.h" />
+    <ClInclude Include="include\Offset-B12.h" />
+    <ClInclude Include="include\Offset-B13.h" />
+    <ClInclude Include="include\Offset-B14.h" />
+    <ClInclude Include="include\Offset-B16.h" />
+    <ClInclude Include="include\OffsetLL-B12.h" />
+    <ClInclude Include="include\OffsetLL-B14.h" />
+    <ClInclude Include="include\OffsetLL-B16.h" />
+    <ClInclude Include="include\OffsetLL-B18.h" />
+    <ClInclude Include="include\OffsetLL-B22.h" />
+    <ClInclude Include="include\OffsetLL-B24.h" />
+    <ClInclude Include="include\OffsetSystem.h" />
+    <ClInclude Include="include\OPEN_TYPE.h" />
+    <ClInclude Include="include\OverlayLaneList.h" />
+    <ClInclude Include="include\PartII-Id.h" />
+    <ClInclude Include="include\PartIIcontent.h" />
+    <ClInclude Include="include\PathHistory.h" />
+    <ClInclude Include="include\PathHistoryPoint.h" />
+    <ClInclude Include="include\PathHistoryPointList.h" />
+    <ClInclude Include="include\PathPrediction.h" />
+    <ClInclude Include="include\PayloadData.h" />
+    <ClInclude Include="include\PedestrianBicycleDetect.h" />
+    <ClInclude Include="include\PersonalAssistive.h" />
+    <ClInclude Include="include\PersonalClusterRadius.h" />
+    <ClInclude Include="include\PersonalCrossingInProgress.h" />
+    <ClInclude Include="include\PersonalCrossingRequest.h" />
+    <ClInclude Include="include\PersonalDeviceUsageState.h" />
+    <ClInclude Include="include\PersonalDeviceUserType.h" />
+    <ClInclude Include="include\PersonalSafetyMessage.h" />
+    <ClInclude Include="include\per_decoder.h" />
+    <ClInclude Include="include\per_encoder.h" />
+    <ClInclude Include="include\per_opentype.h" />
+    <ClInclude Include="include\per_support.h" />
+    <ClInclude Include="include\PivotingAllowed.h" />
+    <ClInclude Include="include\PivotPointDescription.h" />
+    <ClInclude Include="include\Position3D-addGrpB.h" />
+    <ClInclude Include="include\Position3D-addGrpC.h" />
+    <ClInclude Include="include\Position3D.h" />
+    <ClInclude Include="include\PositionalAccuracy.h" />
+    <ClInclude Include="include\PositionConfidence.h" />
+    <ClInclude Include="include\PositionConfidenceSet.h" />
+    <ClInclude Include="include\PreemptPriorityList.h" />
+    <ClInclude Include="include\PrioritizationResponse.h" />
+    <ClInclude Include="include\PrioritizationResponseList.h" />
+    <ClInclude Include="include\PrioritizationResponseStatus.h" />
+    <ClInclude Include="include\Priority.h" />
+    <ClInclude Include="include\PriorityRequestType.h" />
+    <ClInclude Include="include\PrivilegedEventFlags.h" />
+    <ClInclude Include="include\PrivilegedEvents.h" />
+    <ClInclude Include="include\ProbeDataManagement.h" />
+    <ClInclude Include="include\ProbeSegmentNumber.h" />
+    <ClInclude Include="include\ProbeVehicleData.h" />
+    <ClInclude Include="include\PropelledInformation.h" />
+    <ClInclude Include="include\PublicSafetyAndRoadWorkerActivity.h" />
+    <ClInclude Include="include\PublicSafetyDirectingTrafficSubType.h" />
+    <ClInclude Include="include\PublicSafetyEventResponderWorkerType.h" />
+    <ClInclude Include="include\QueueLinkedList.h" />
+    <ClInclude Include="include\Radius-B12.h" />
+    <ClInclude Include="include\RadiusOfCurvature.h" />
+    <ClInclude Include="include\RainSensor.h" />
+    <ClInclude Include="include\RegionalExtension.h" />
+    <ClInclude Include="include\RegionId.h" />
+    <ClInclude Include="include\RegionList.h" />
+    <ClInclude Include="include\RegionOffsets.h" />
+    <ClInclude Include="include\RegionPointSet.h" />
+    <ClInclude Include="include\RegulatorySpeedLimit.h" />
+    <ClInclude Include="include\RequestedItem.h" />
+    <ClInclude Include="include\RequestedItemList.h" />
+    <ClInclude Include="include\RequestID.h" />
+    <ClInclude Include="include\RequestImportanceLevel.h" />
+    <ClInclude Include="include\RequestorDescription.h" />
+    <ClInclude Include="include\RequestorPositionVector.h" />
+    <ClInclude Include="include\RequestorType.h" />
+    <ClInclude Include="include\RequestSubRole.h" />
+    <ClInclude Include="include\ResponderGroupAffected.h" />
+    <ClInclude Include="include\ResponseType.h" />
+    <ClInclude Include="include\RestrictionAppliesTo.h" />
+    <ClInclude Include="include\RestrictionClassAssignment.h" />
+    <ClInclude Include="include\RestrictionClassID.h" />
+    <ClInclude Include="include\RestrictionClassList.h" />
+    <ClInclude Include="include\RestrictionUserType-addGrpC.h" />
+    <ClInclude Include="include\RestrictionUserType.h" />
+    <ClInclude Include="include\RestrictionUserTypeList.h" />
+    <ClInclude Include="include\RoadLaneSetList.h" />
+    <ClInclude Include="include\RoadRegulatorID.h" />
+    <ClInclude Include="include\RoadSegment.h" />
+    <ClInclude Include="include\RoadSegmentID.h" />
+    <ClInclude Include="include\RoadSegmentList.h" />
+    <ClInclude Include="include\RoadSegmentReferenceID.h" />
+    <ClInclude Include="include\RoadSideAlert.h" />
+    <ClInclude Include="include\RoadSignID.h" />
+    <ClInclude Include="include\RoadwayCrownAngle.h" />
+    <ClInclude Include="include\RTCM-Revision.h" />
+    <ClInclude Include="include\RTCMcorrections.h" />
+    <ClInclude Include="include\RTCMheader.h" />
+    <ClInclude Include="include\RTCMmessage.h" />
+    <ClInclude Include="include\RTCMmessageList.h" />
+    <ClInclude Include="include\RTCMPackage.h" />
+    <ClInclude Include="include\Sample.h" />
+    <ClInclude Include="include\Scale-B12.h" />
+    <ClInclude Include="include\Second.h" />
+    <ClInclude Include="include\SecondOfTime.h" />
+    <ClInclude Include="include\SecondsAngle.h" />
+    <ClInclude Include="include\SegmentAttributeLL.h" />
+    <ClInclude Include="include\SegmentAttributeLLList.h" />
+    <ClInclude Include="include\SegmentAttributeXY.h" />
+    <ClInclude Include="include\SegmentAttributeXYList.h" />
+    <ClInclude Include="include\SemiMajorAxisAccuracy.h" />
+    <ClInclude Include="include\SemiMajorAxisOrientation.h" />
+    <ClInclude Include="include\SemiMinorAxisAccuracy.h" />
+    <ClInclude Include="include\ShapePointSet.h" />
+    <ClInclude Include="include\SignalControlZone.h" />
+    <ClInclude Include="include\SignalGroupID.h" />
+    <ClInclude Include="include\SignalHeadLocation.h" />
+    <ClInclude Include="include\SignalHeadLocationList.h" />
+    <ClInclude Include="include\SignalReqScheme.h" />
+    <ClInclude Include="include\SignalRequest.h" />
+    <ClInclude Include="include\SignalRequesterInfo.h" />
+    <ClInclude Include="include\SignalRequestList.h" />
+    <ClInclude Include="include\SignalRequestMessage.h" />
+    <ClInclude Include="include\SignalRequestPackage.h" />
+    <ClInclude Include="include\SignalStatus.h" />
+    <ClInclude Include="include\SignalStatusList.h" />
+    <ClInclude Include="include\SignalStatusMessage.h" />
+    <ClInclude Include="include\SignalStatusPackage.h" />
+    <ClInclude Include="include\SignalStatusPackageList.h" />
+    <ClInclude Include="include\SignPrority.h" />
+    <ClInclude Include="include\SirenInUse.h" />
+    <ClInclude Include="include\Snapshot.h" />
+    <ClInclude Include="include\SnapshotDistance.h" />
+    <ClInclude Include="include\SnapshotTime.h" />
+    <ClInclude Include="include\SPAT.h" />
+    <ClInclude Include="include\SpecialVehicleExtensions.h" />
+    <ClInclude Include="include\Speed.h" />
+    <ClInclude Include="include\SpeedAdvice.h" />
+    <ClInclude Include="include\SpeedandHeadingandThrottleConfidence.h" />
+    <ClInclude Include="include\SpeedConfidence.h" />
+    <ClInclude Include="include\SpeedLimit.h" />
+    <ClInclude Include="include\SpeedLimitList.h" />
+    <ClInclude Include="include\SpeedLimitType.h" />
+    <ClInclude Include="include\SpeedProfile.h" />
+    <ClInclude Include="include\SpeedProfileMeasurement.h" />
+    <ClInclude Include="include\SpeedProfileMeasurementList.h" />
+    <ClInclude Include="include\SSD1306.h" />
+    <ClInclude Include="include\SSPindex.h" />
+    <ClInclude Include="include\StabilityControlStatus.h" />
+    <ClInclude Include="include\StationID.h" />
+    <ClInclude Include="include\SteeringAxleLubePressure.h" />
+    <ClInclude Include="include\SteeringAxleTemperature.h" />
+    <ClInclude Include="include\SteeringWheelAngle.h" />
+    <ClInclude Include="include\SteeringWheelAngleConfidence.h" />
+    <ClInclude Include="include\SteeringWheelAngleRateOfChange.h" />
+    <ClInclude Include="include\SummerTime.h" />
+    <ClInclude Include="include\SunSensor.h" />
+    <ClInclude Include="include\SupplementalVehicleExtensions.h" />
+    <ClInclude Include="include\TemporaryID.h" />
+    <ClInclude Include="include\TenthSecond.h" />
+    <ClInclude Include="include\TermDistance.h" />
+    <ClInclude Include="include\TermTime.h" />
+    <ClInclude Include="include\TestMessage00.h" />
+    <ClInclude Include="include\TestMessage01.h" />
+    <ClInclude Include="include\TestMessage02.h" />
+    <ClInclude Include="include\TestMessage03.h" />
+    <ClInclude Include="include\TestMessage04.h" />
+    <ClInclude Include="include\TestMessage05.h" />
+    <ClInclude Include="include\TestMessage06.h" />
+    <ClInclude Include="include\TestMessage07.h" />
+    <ClInclude Include="include\TestMessage08.h" />
+    <ClInclude Include="include\TestMessage09.h" />
+    <ClInclude Include="include\TestMessage10.h" />
+    <ClInclude Include="include\TestMessage11.h" />
+    <ClInclude Include="include\TestMessage12.h" />
+    <ClInclude Include="include\TestMessage13.h" />
+    <ClInclude Include="include\TestMessage14.h" />
+    <ClInclude Include="include\TestMessage15.h" />
+    <ClInclude Include="include\ThrottleConfidence.h" />
+    <ClInclude Include="include\ThrottlePosition.h" />
+    <ClInclude Include="include\TimeChangeDetails.h" />
+    <ClInclude Include="include\TimeConfidence.h" />
+    <ClInclude Include="include\TimeIntervalConfidence.h" />
+    <ClInclude Include="include\TimeOffset.h" />
+    <ClInclude Include="include\TimeRemaining.h" />
+    <ClInclude Include="include\TireData.h" />
+    <ClInclude Include="include\TireDataList.h" />
+    <ClInclude Include="include\TireLeakageRate.h" />
+    <ClInclude Include="include\TireLocation.h" />
+    <ClInclude Include="include\TirePressure.h" />
+    <ClInclude Include="include\TirePressureThresholdDetection.h" />
+    <ClInclude Include="include\TireTemp.h" />
+    <ClInclude Include="include\TractionControlStatus.h" />
+    <ClInclude Include="include\TrailerData.h" />
+    <ClInclude Include="include\TrailerHistoryPoint.h" />
+    <ClInclude Include="include\TrailerHistoryPointList.h" />
+    <ClInclude Include="include\TrailerMass.h" />
+    <ClInclude Include="include\TrailerUnitDescription.h" />
+    <ClInclude Include="include\TrailerUnitDescriptionList.h" />
+    <ClInclude Include="include\TrailerWeight.h" />
+    <ClInclude Include="include\TransitStatus.h" />
+    <ClInclude Include="include\TransitVehicleOccupancy.h" />
+    <ClInclude Include="include\TransitVehicleStatus.h" />
+    <ClInclude Include="include\TransmissionAndSpeed.h" />
+    <ClInclude Include="include\TransmissionState.h" />
+    <ClInclude Include="include\TravelerDataFrame.h" />
+    <ClInclude Include="include\TravelerDataFrameList.h" />
+    <ClInclude Include="include\TravelerInformation.h" />
+    <ClInclude Include="include\TravelerInfoType.h" />
+    <ClInclude Include="include\UltraSonicSC04.h" />
+    <ClInclude Include="include\UniqueMSGID.h" />
+    <ClInclude Include="include\URL-Base.h" />
+    <ClInclude Include="include\URL-Link.h" />
+    <ClInclude Include="include\URL-Short.h" />
+    <ClInclude Include="include\UserSizeAndBehaviour.h" />
+    <ClInclude Include="include\ValidRegion.h" />
+    <ClInclude Include="include\VehicleClassification.h" />
+    <ClInclude Include="include\VehicleData.h" />
+    <ClInclude Include="include\VehicleEventFlags.h" />
+    <ClInclude Include="include\VehicleGroupAffected.h" />
+    <ClInclude Include="include\VehicleHeight.h" />
+    <ClInclude Include="include\VehicleID.h" />
+    <ClInclude Include="include\VehicleIdent.h" />
+    <ClInclude Include="include\VehicleLength.h" />
+    <ClInclude Include="include\VehicleMass.h" />
+    <ClInclude Include="include\VehicleSafetyExtensions.h" />
+    <ClInclude Include="include\VehicleSize.h" />
+    <ClInclude Include="include\VehicleStatus.h" />
+    <ClInclude Include="include\VehicleStatusDeviceTypeTag.h" />
+    <ClInclude Include="include\VehicleStatusRequest.h" />
+    <ClInclude Include="include\VehicleStatusRequestList.h" />
+    <ClInclude Include="include\VehicleToLanePosition.h" />
+    <ClInclude Include="include\VehicleToLanePositionList.h" />
+    <ClInclude Include="include\VehicleType.h" />
+    <ClInclude Include="include\VehicleWidth.h" />
+    <ClInclude Include="include\Velocity.h" />
+    <ClInclude Include="include\VerticalAcceleration.h" />
+    <ClInclude Include="include\VerticalAccelerationThreshold.h" />
+    <ClInclude Include="include\VerticalOffset.h" />
+    <ClInclude Include="include\VertOffset-B07.h" />
+    <ClInclude Include="include\VertOffset-B08.h" />
+    <ClInclude Include="include\VertOffset-B09.h" />
+    <ClInclude Include="include\VertOffset-B10.h" />
+    <ClInclude Include="include\VertOffset-B11.h" />
+    <ClInclude Include="include\VertOffset-B12.h" />
+    <ClInclude Include="include\VINstring.h" />
+    <ClInclude Include="include\WaitOnStopline.h" />
+    <ClInclude Include="include\WeatherProbe.h" />
+    <ClInclude Include="include\WeatherReport.h" />
+    <ClInclude Include="include\WheelEndElectFault.h" />
+    <ClInclude Include="include\WheelSensorStatus.h" />
+    <ClInclude Include="include\WiperRate.h" />
+    <ClInclude Include="include\WiperSet.h" />
+    <ClInclude Include="include\WiperStatus.h" />
+    <ClInclude Include="include\WorkZone.h" />
+    <ClInclude Include="include\xer_decoder.h" />
+    <ClInclude Include="include\xer_encoder.h" />
+    <ClInclude Include="include\xer_support.h" />
+    <ClInclude Include="include\YawRate.h" />
+    <ClInclude Include="include\YawRateConfidence.h" />
+    <ClInclude Include="include\Year.h" />
+    <ClInclude Include="include\ZoneLength.h" />
+    <ClInclude Include="include\Zoom.h" />
+    <ClInclude Include="SocketConnection.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\libasncodec.a" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="readme\readme.txt" />
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(ClCompile.AdditionalIncludeDirectories);include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>%(Link.AdditionalLibraryDirectories);lib</AdditionalLibraryDirectories>
+      <LibraryDependencies>asncodec;pthread</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
