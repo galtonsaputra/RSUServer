@@ -40,10 +40,9 @@ void SocketConnection::CloseWifiSocket()
 
 void SocketConnection::ReadClient(int currentActiveSocket, int pipe)
 {
-	int status = 0;
-	uint8_t* rcvPipeBuffer = (uint8_t*)calloc(1, 100);
-	uint8_t* rcvBuffer = (uint8_t*)calloc(1, 1024);	
 	SocketConnection sc;
+	uint8_t* rcvBuffer = (uint8_t*)calloc(1, 1024);	
+
 	if (currentActiveSocket != -1) {
 		while (true)
 		{
@@ -51,13 +50,10 @@ void SocketConnection::ReadClient(int currentActiveSocket, int pipe)
   			int bitsRead = recv(currentActiveSocket, (void*)rcvBuffer, 100, 0);	
 			if (bitsRead != -1 && bitsRead != 0) {
 				write(pipe, rcvBuffer, bitsRead);
-
 			}
 			else { break; }
 		}
 	}
-
-	return;
 }
 
 void SocketConnection::StartThread() {

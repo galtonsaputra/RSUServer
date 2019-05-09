@@ -34,12 +34,12 @@ class SocketConnection
 		int ConnectUsing(char *addrFamily, char *address, uint8_t channelOrPort)
 		{
 			int _connectionStatus;
+
 			//Build lookup 
 			std::map<char*, int> m;
-			m["IPv4"] = 0;
-			m["IPv6"] = 1;
-			m["BT_RFComm"] = 2;
-			//enum?
+			m[(char*)"IPv4"] = 0;
+			m[(char*)"IPv6"] = 1;
+			m[(char*)"BT_RFComm"] = 2;
 
 			std::map<char*, int>::iterator it;
 			it = m.find(addrFamily);
@@ -72,7 +72,7 @@ class SocketConnection
 			struct sockaddr_in address;
 		} WiFiConfig;
 
-		//Whats the use of static?
+		//Wifi configuration saved into struct to be publicly accessed
 		int socketId;
 		WiFiConfig _wifiConnection;
 
@@ -86,10 +86,11 @@ class SocketConnection
 
 		static void ReadPipeToProcessMessage(int pipe);
 
-		static void DummyMethod(SocketConnection* pThis)
-		{
-			pThis->_wifiConnection.socket;
-		}
+		//Reuse for multiple connection
+		//static void DummyMethod(SocketConnection* pThis)
+		//{
+		//	pThis->_wifiConnection.socket;
+		//}
 
 	private:
 		int ConnectWith(int addrFamily, char *address, uint8_t channelOrPort);

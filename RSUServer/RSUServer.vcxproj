@@ -79,6 +79,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RSU_Server_Lever.cpp" />
     <ClCompile Include="SocketConnection.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -625,6 +626,7 @@
     <ClInclude Include="include\Year.h" />
     <ClInclude Include="include\ZoneLength.h" />
     <ClInclude Include="include\Zoom.h" />
+    <ClInclude Include="RSU_Server_lever.h" />
     <ClInclude Include="SocketConnection.h" />
   </ItemGroup>
   <ItemGroup>
@@ -639,7 +641,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%(Link.AdditionalLibraryDirectories);lib</AdditionalLibraryDirectories>
-      <LibraryDependencies>asncodec;pthread</LibraryDependencies>
+      <LibraryDependencies>asncodec;pthread;wiringPi;</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

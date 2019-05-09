@@ -7,10 +7,10 @@
 #include "ConcurrentQueue.h"
 #include "MessageFrame.h"
 #include "BasicSafetyMessage.h" 
-
-Queue<MessageFrame_t*> MsgQueue;
+#include "RSU_Server_lever.h"
 
 #define PORT 8888
+Queue<MessageFrame_t*> MsgQueue;
 
 void ProcessQueueMessages() {
 
@@ -65,33 +65,46 @@ int main()
 	// This thread is responsible for the actual processing of J2735
 	// Message frames placed onto the queue within ReadPipeToProcessMessage
 	// theoretically, this could be created within the aformentioned function above.
-	std::thread processQueueMessage{ ProcessQueueMessages };
+	//std::thread processQueueMessage{ ProcessQueueMessages };
 
 	// We now create in essence the server side of the process (eventually with fork)
 	// We open a wifi socket and if ok we then need to simply wait for a connection
 	// and push data to the pipe for the pseudo 'client' to process.
-	int connection = sc.ConnectUsing("IPv4", "", 8888);
+	//int connection = sc.ConnectUsing("IPv4", "", 8888);
 
-	if (connection == -1) { 
-		perror("Client connection ERROR: "); 
-		exit(-1);
-	}
+	//if (connection == -1) { 
+	//	perror("Client connection ERROR: "); 
+	//	exit(-1);
+	//}
 
-	std::cout << 
-		"Client connected...";
+	std::cout << "Client connected...";
 
 	//Start a thread to READ raw bits
-	std::thread processor = std::thread 
-		{ SocketConnection::ReadClient, sc._wifiConnection.socket, sc.fileDes[1]};
-	//sc.StartThread();
-	//sc.ReadClient(sc._wifiConnection.socket, sc.fileDes[1]);
+	//std::thread processor = std::thread 
+	//	{ SocketConnection::ReadClient, sc._wifiConnection.socket, sc.fileDes[1]};
 	
+	//Initialise lever sensor and setting pins to INPUT
+	if (Lever_Switch::InitWiringPi() == -1)
+	{
+		std::cout << "WiringPi Lever init failed.";
+		exit(-1);
+	}
+	else 
+	{
+		Lever_Switch::SetLeverPin();
+	}
+
 	// Handles CTRL^C for process termination
 	signal(SIGINT, my_function);
+
 	while (!flag) {
-		std::cout << "Client speed reading receive ...";
-		sc.ReadPipeToProcessMessage(sc.fileDes[0]);
-		//std::thread readingMsg { sc.ReadPipeToProcessMessage, sc.fileDes[0] };
+		//Speed Readings
+		//std::cout << "Client speed reading receive ...";
+		//sc.ReadPipeToProcessMessage(sc.fileDes[0]);
+
+		//Start a thread to read lever click		
+		Lever_Switch::StartLever_A_Reading();
+
 		std::cin;
 	}
 
