@@ -3,6 +3,9 @@
 #include <stack>
 #include <signal.h> 
 
+//TEST STOPWATCH HERE
+#include <chrono>
+
 #include "SocketConnection.h"
 #include "ConcurrentQueue.h"
 #include "MessageFrame.h"
@@ -11,6 +14,7 @@
 
 #define PORT 8888
 Queue<MessageFrame_t*> MsgQueue;
+
 
 void ProcessQueueMessages() {
 
@@ -44,6 +48,7 @@ volatile sig_atomic_t flag = 0;
 void my_function(int sig) { // can be called asynchronously
 	flag = 1; // set flag
 }
+
 
 int main()
 {
@@ -92,6 +97,14 @@ int main()
 	else 
 	{
 		Lever_Switch::SetLeverPin();
+
+		//LEVER A
+		wiringPiISR(LeverAStart, INT_EDGE_FALLING, &Lever_Switch::StartStopWatch);
+		wiringPiISR(LeverAStop, INT_EDGE_FALLING, &Lever_Switch::StopStopWatch);
+
+		//LEVER B
+		wiringPiISR(LeverBStart, INT_EDGE_FALLING, &Lever_Switch::StartStopWatch_LeverB);
+		wiringPiISR(LeverBStop, INT_EDGE_FALLING, &Lever_Switch::StopStopWatch_LeverB);
 	}
 
 	// Handles CTRL^C for process termination
@@ -102,10 +115,10 @@ int main()
 		//std::cout << "Client speed reading receive ...";
 		//sc.ReadPipeToProcessMessage(sc.fileDes[0]);
 
-		//Start a thread to read lever click		
-		Lever_Switch::StartLever_A_Reading();
+		//Start a thread to WAIT TO LISTEN lever click
+		//Lever_Switch::StartLever_A_Reading();
 
-		std::cin;
+		//cin.get();
 	}
 
 	return 0;

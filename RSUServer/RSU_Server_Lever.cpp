@@ -1,14 +1,8 @@
 #include "RSU_Server_lever.h"
 
-//Lever A Pin config
-static int LeverAStart = 7;
-static int LeverAStop = 0;
-
-//StopWatch config -> using high_res_clock as stopwatch
-auto startWatch = std::chrono::high_resolution_clock::now();
-auto stopWatch = std::chrono::high_resolution_clock::now();
-
 VerifySpeed vs;
+auto startLever_A_Watch = std::chrono::high_resolution_clock::now();
+auto startLever_B_Watch = std::chrono::high_resolution_clock::now();
 
 int Lever_Switch::InitWiringPi()
 {
@@ -24,6 +18,9 @@ void Lever_Switch::SetLeverPin()
 {
 	pinMode(LeverAStart, INPUT);
 	pinMode(LeverAStop, INPUT);
+	pinMode(LeverBStart, INPUT);
+	pinMode(LeverBStop, INPUT);
+
 }
 
 void Lever_Switch::StartLever_A_Reading()
@@ -31,7 +28,7 @@ void Lever_Switch::StartLever_A_Reading()
 	//Flag to mark start has been clicked
 	bool startCLickTriggered = false;
 
-	//START
+	//START LEVER
 	if (digitalRead(LeverAStart) == 0)
 	{
 		printf("LEVER A - START stopwatch \n");
@@ -40,7 +37,7 @@ void Lever_Switch::StartLever_A_Reading()
 		//Flag for loop to enter and wait for STOP lever pressed
 		startCLickTriggered = true;
 		while (startCLickTriggered) {
-			//STOP
+			//STOP LEVER
 			if (digitalRead(LeverAStop) == 0)
 			{
 				printf("LEVER A - STOP stopwatch \n");
@@ -51,20 +48,87 @@ void Lever_Switch::StartLever_A_Reading()
 
 				//Time is stored in seconds and rounded to two-decimal places
 				std::cout.precision(2);
-				vs.elapsedTIme = elapsedTime.count();
+				vs.elapsedTime = elapsedTime.count();
+				double avgSpeedReading = vs.CalculateSpeed(vs.elapsedTime);
+
 				std::cout << "Elapsed time: " << elapsedTime.count() << " s\n";
+				std::cout << "Average speed: " << avgSpeedReading << " cm/s\n";
 				break;
 			}
 		}
 	}
 };
 
-//Speed formulae where Speed = Distance / Time
-int VerifySpeed::CalculateSpeed(double* time)
+//LEVER A
+void Lever_Switch::StartStopWatch() 
 {
-	//YOU NEED TO TRUNCATE to two decimal place.
-	//double roundNumber = time.setPrecision(2);
-	
-	double calculatedSpeed = vs.roadDistance / *time;
+	printf("LEVER A - START stopwatch \n");
+	auto startWatch = std::chrono::high_resolution_clock::now();
+	startLever_A_Watch = startWatch;
+
+	//Straight system call to set pin's edge to none -> disable
+	std::string strCommand = "gpio edge 2 none";
+	const char *command_LeverA_Start = strCommand.c_str();
+	std::system(command_LeverA_Start);
+	return;
+}
+
+void Lever_Switch::StopStopWatch()
+{
+	printf("LEVER A - STOP stopwatch \n");
+	auto stopWatch = std::chrono::high_resolution_clock::now();
+
+	//Calculate elapsed in seconds
+	std::chrono::duration<double> elapsedTime = stopWatch - startLever_A_Watch;
+	//Prints fixed-notation to 2 decimal place
+	std::cout.precision(2);
+	std::cout << "Lever A elapsed time: " << elapsedTime.count() << " s\n" << std::fixed;
+
+	//Straight system call to set pin's edge to none -> disable
+	std::string strCommand = "gpio edge 0 none";
+	const char *command_LeverA_Stop = strCommand.c_str();
+	std::system(command_LeverA_Stop);
+	return;
+}
+
+//LEVERB
+void Lever_Switch::StartStopWatch_LeverB()
+{
+	printf("LEVER B - START stopwatch \n");
+	auto startWatch = std::chrono::high_resolution_clock::now();
+	startLever_B_Watch = startWatch;
+
+	//Straight system call to set pin's edge to none -> disable
+	std::string strCommand = "gpio edge 4 none";
+	const char *command_LeverB_Start = strCommand.c_str();
+	std::system(command_LeverB_Start);
+	return;
+}
+
+void Lever_Switch::StopStopWatch_LeverB()
+{
+	printf("LEVER B - STOP stopwatch \n");
+	auto stopWatch = std::chrono::high_resolution_clock::now();
+
+	//Calculate elapsed in seconds
+	std::chrono::duration<double> elapsedTime = stopWatch - startLever_B_Watch;
+
+	std::cout.precision(2);
+	std::cout << "Lever B elapsed time: " << elapsedTime.count() << " s\n" << std::fixed;
+
+	//Straight system call to set pin's edge to none -> disable
+	std::string strCommand = "gpio edge 5 none";
+	const char *command_LeverB_Stop = strCommand.c_str();
+	std::system(command_LeverB_Stop);
+
+	return;
+}
+
+//Speed formulae where Speed = Distance / Time
+//WRONG. RECALCULATE
+double VerifySpeed::CalculateSpeed(double time)
+{
+	//Missing proper formula. 
+	double calculatedSpeed = vs.roadDistance / time;
 	return calculatedSpeed;
 }

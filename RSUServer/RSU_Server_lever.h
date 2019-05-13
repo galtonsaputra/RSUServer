@@ -6,10 +6,21 @@
 
 #include <cstdio>
 #include <chrono>
+#include <thread>
+
 #include <iostream>
+#include <string>
 
 #include <math.h>
 #include <wiringPi.h>
+
+//Lever A Pin config
+static int LeverAStart = 2;
+static int LeverAStop = 0;
+
+//Lever B Pin config
+static int LeverBStart = 4;
+static int LeverBStop = 5;
 
 namespace Lever_Switch
 {
@@ -17,15 +28,23 @@ namespace Lever_Switch
 
 	void SetLeverPin();
 	void StartLever_A_Reading();
+
+	//Stopwatch
+	void StartStopWatch();
+	void StopStopWatch();
+	void StartStopWatch_LeverB();
+	void StopStopWatch_LeverB();
+
 };
 
 class VerifySpeed 
 {
 	public:
 		//Time taken from lever's sensor readings. 2 decimal point number
-		double elapsedTIme;
+		double elapsedTime;
 		//Calculate speed to cm/seconds
-		int CalculateSpeed(double* time);
+		double CalculateSpeed(double time);
+		
 	private:
 		//Road plane is 100 centimeters
 		int roadDistance = 100;
