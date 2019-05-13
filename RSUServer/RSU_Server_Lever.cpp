@@ -1,8 +1,14 @@
 #include "RSU_Server_lever.h"
 
 VerifySpeed vs;
+
 auto startLever_A_Watch = std::chrono::high_resolution_clock::now();
 auto startLever_B_Watch = std::chrono::high_resolution_clock::now();
+
+bool lever_A_STOP_trigged = false;
+bool lever_B_STOP_trigged = false;
+double elapsedTime_LeverA;
+double elapsedTime_LeverB;
 
 int Lever_Switch::InitWiringPi()
 {
@@ -82,13 +88,16 @@ void Lever_Switch::StopStopWatch()
 	std::chrono::duration<double> elapsedTime = stopWatch - startLever_A_Watch;
 	//Prints fixed-notation to 2 decimal place
 	std::cout.precision(2);
-	std::cout << "Lever A elapsed time: " << elapsedTime.count() << " s\n" << std::fixed;
+	std::cout << "Lever A stop: " << elapsedTime.count() << " s\n" << std::fixed;
 
 	//Straight system call to set pin's edge to none -> disable
 	std::string strCommand = "gpio edge 0 none";
 	const char *command_LeverA_Stop = strCommand.c_str();
 	std::system(command_LeverA_Stop);
-	return;
+
+	lever_A_STOP_trigged = true;
+	elapsedTime_LeverA = elapsedTime.count();
+
 }
 
 //LEVERB
@@ -121,14 +130,13 @@ void Lever_Switch::StopStopWatch_LeverB()
 	const char *command_LeverB_Stop = strCommand.c_str();
 	std::system(command_LeverB_Stop);
 
-	return;
+	lever_B_STOP_trigged = true;
+	elapsedTime_LeverB = elapsedTime.count();
 }
 
 //Speed formulae where Speed = Distance / Time
-//WRONG. RECALCULATE
 double VerifySpeed::CalculateSpeed(double time)
 {
-	//Missing proper formula. 
 	double calculatedSpeed = vs.roadDistance / time;
 	return calculatedSpeed;
 }

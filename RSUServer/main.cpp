@@ -15,6 +15,11 @@
 #define PORT 8888
 Queue<MessageFrame_t*> MsgQueue;
 
+//Lever Config
+extern bool lever_A_STOP_trigged;
+extern bool lever_B_STOP_trigged;
+extern double elapsedTime_LeverA;
+extern double elapsedTime_LeverB;
 
 void ProcessQueueMessages() {
 
@@ -110,6 +115,8 @@ int main()
 	// Handles CTRL^C for process termination
 	signal(SIGINT, my_function);
 
+	VerifySpeed vs;
+
 	while (!flag) {
 		//Speed Readings
 		//std::cout << "Client speed reading receive ...";
@@ -117,6 +124,22 @@ int main()
 
 		//Start a thread to WAIT TO LISTEN lever click
 		//Lever_Switch::StartLever_A_Reading();
+		if (lever_A_STOP_trigged)
+		{
+			//NOTE: there are two avg readings given from this.
+			double avgSpeedReadingLeverA = vs.CalculateSpeed(elapsedTime_LeverA);
+			std::cout << "Average speed A: " << avgSpeedReadingLeverA << " cm/s\n";
+			
+			lever_A_STOP_trigged = false;
+		}
+
+		else if (lever_B_STOP_trigged)
+		{
+			double avgSpeedReadingLeverB = vs.CalculateSpeed(elapsedTime_LeverB);
+			std::cout << "Average speed B: " << avgSpeedReadingLeverB << " cm/s\n";
+
+			lever_B_STOP_trigged = false;
+		}
 
 		//cin.get();
 	}
