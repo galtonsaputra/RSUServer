@@ -95,9 +95,9 @@ void Lever_Switch::StopStopWatch()
 	const char *command_LeverA_Stop = strCommand.c_str();
 	std::system(command_LeverA_Stop);
 
+	//To store elapsed time count for speed calculation
 	lever_A_STOP_trigged = true;
 	elapsedTime_LeverA = elapsedTime.count();
-
 }
 
 //LEVERB

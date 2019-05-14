@@ -24,6 +24,30 @@ extern bool lever_B_STOP_trigged;
 extern double elapsedTime_LeverA;
 extern double elapsedTime_LeverB;
 
+void ActivateSpeedSensor()
+{
+	VerifySpeed vs;
+	while (true)
+	{
+		if (lever_A_STOP_trigged)
+		{
+			//NOTE: there are two avg readings given from this.
+			double avgSpeedReadingLeverA = vs.CalculateSpeed(elapsedTime_LeverA);
+			std::cout << "Average speed A: " << avgSpeedReadingLeverA << " cm/s\n";
+
+			lever_A_STOP_trigged = false;
+		}
+
+		else if (lever_B_STOP_trigged)
+		{
+			double avgSpeedReadingLeverB = vs.CalculateSpeed(elapsedTime_LeverB);
+			std::cout << "Average speed B: " << avgSpeedReadingLeverB << " cm/s\n";
+
+			lever_B_STOP_trigged = false;
+		}
+	}
+}
+
 void ProcessQueueMessages() {
 
 	char msg[100];
@@ -61,23 +85,29 @@ void my_function(int sig) { // can be called asynchronously
 
 int main()
 {
-	printf("RSU Server \n");
-	
-	//01. Open socket for client to connect
 	SocketConnection sc;
+	printf("RSU Server Controls \n");
+	
+	/*(1) START RSU SERVER HOSTING
+	Opens RSU server side to process and incoming connection.
+	- Creates and open a wifi socket to wait for a connection at PORT:8888
+	- Manages multiple socket connection [open + close] notification
+	- Starts a pipe to push data to the pipe for thread processQueueMessage to process.
+	- Connection error handling is handled within SocketConnection, exiting immediately before starting any pipe or message read. 
+	. */
 
-	// This thread is responsible for the actual processing of J2735
-	// Message frames placed onto the queue within ReadPipeToProcessMessage
-	// theoretically, this could be created within the aformentioned function above.
+	std::thread openMultipleConnection = std::thread{ SocketConnection::StartServer };
+
+	/*(2) PROCESS RECEIVED J2735 MSG
+	This thread is responsible for the actual processing of J2735.
+	Message frames placed onto the queue within ReadPipeToProcessMessage,
+	are decoded through its message.id type and output to console.
+	*/
 	std::thread processQueueMessage{ ProcessQueueMessages };
-
-	// We now create in essence the server side of the process (eventually with fork)
-	// We open a wifi socket and if ok we then need to simply wait for a connection
-	// and push data to the pipe for the pseudo 'client' to process.
-	// Connection error handling is handled within SocketConnection. 
-	std::thread openMultipleConnection = std::thread{ SocketConnection::StartServer };	
 		
-	//Initialise lever sensor and setting pins to INPUT
+	/*(3) INIT LEVER SENSOR
+	Initialise lever sensor and setting pins to INPUT
+	*/
 	if (Lever_Switch::InitWiringPi() == -1)
 	{
 		std::cout << "WiringPi Lever init failed. \n";
@@ -96,32 +126,27 @@ int main()
 		wiringPiISR(LeverBStop, INT_EDGE_FALLING, &Lever_Switch::StopStopWatch_LeverB);
 	}
 
+	/*(4) START LEVER THREAD
+	Starts a thread to activate sensors to:
+	- Listen & wait for sensors lever click
+	- Start/Stop stopwatch
+	- Calculate AverageSpeed in cm/s
+	*/
+	std::thread ActivateSensor{ ActivateSpeedSensor };
+
+	//Initialise Lever readings class
+	VerifySpeed vs;
+
 	// Handles CTRL^C for process termination
 	signal(SIGINT, my_function);
 
-	VerifySpeed vs;
-
-	while (!flag) {
-		//Speed Readings
+	//Main loop
+	while (!flag) 
+	{		
+		/*(5) DECODE J2735 MSG FROM PIPE
+		Pipe out received incoming speed messages to J2735 queue
+		*/
 		sc.ReadPipeToProcessMessage(fileDesGlobal[0]);
-
-		//Start a thread to WAIT TO LISTEN lever click
-		if (lever_A_STOP_trigged)
-		{
-			//NOTE: there are two avg readings given from this.
-			double avgSpeedReadingLeverA = vs.CalculateSpeed(elapsedTime_LeverA);
-			std::cout << "Average speed A: " << avgSpeedReadingLeverA << " cm/s\n";
-			
-			lever_A_STOP_trigged = false;
-		}
-
-		else if (lever_B_STOP_trigged)
-		{
-			double avgSpeedReadingLeverB = vs.CalculateSpeed(elapsedTime_LeverB);
-			std::cout << "Average speed B: " << avgSpeedReadingLeverB << " cm/s\n";
-
-			lever_B_STOP_trigged = false;
-		}
 
 		//std::cin.get();
 	}

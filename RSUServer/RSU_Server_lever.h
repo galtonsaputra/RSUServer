@@ -46,6 +46,6 @@ class VerifySpeed
 		double CalculateSpeed(double time);
 		
 	private:
-		//Road plane is 100 centimeters
+		//Road length is tested at 100cm
 		int roadDistance = 100;
 };
