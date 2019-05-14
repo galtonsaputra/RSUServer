@@ -27,7 +27,6 @@ extern double elapsedTime_LeverB;
 void ProcessQueueMessages() {
 
 	char msg[100];
-	SocketConnection sc;
 
 	while (true) {
 

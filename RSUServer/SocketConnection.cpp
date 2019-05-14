@@ -11,7 +11,6 @@ extern stack<MessageFrame_t*> mystack;
 
 void SocketConnection::ReadClient(int currentActiveSocket, int pipe)
 {
-	SocketConnection sc;
 	uint8_t* rcvBuffer = (uint8_t*)calloc(1, 1024);	
 
 	if (currentActiveSocket != -1) {
@@ -73,6 +72,11 @@ void SocketConnection::StartServer()
 	//Create Pipe and start thread to listen and read pipe messages
 	SocketConnection socketConnection;
 	int pipeCreation = socketConnection.CreatePipe();
+	if (pipeCreation == -1) 
+	{
+		perror("Pipe creation error: \n");
+	}
+
 	std::thread readingMsg { socketConnection.ReadPipeToProcessMessage, socketConnection.fileDes[0] };
 
 	//initialise all client_socket[] to 0 so not checked 
