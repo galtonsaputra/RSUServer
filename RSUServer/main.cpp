@@ -15,6 +15,9 @@
 #define PORT 8888
 Queue<MessageFrame_t*> MsgQueue;
 
+extern int fileDesGlobal[2];
+extern char* transmittingIP;
+
 //Lever Config
 extern bool lever_A_STOP_trigged;
 extern bool lever_B_STOP_trigged;
@@ -36,7 +39,9 @@ void ProcessQueueMessages() {
 			case 20: 
 			{
 				BasicSafetyMessage_t* bsm = &item->value.choice.BasicSafetyMessage;
-				sprintf(msg, "Speed %ld\n", bsm->coreData.speed);
+				printf("Message received from: %s ...\n",
+					transmittingIP);
+				sprintf(msg, "Transmitted speed reading of: %ld\n", bsm->coreData.speed);
 				printf(msg);
 				break;
 			}
@@ -57,46 +62,26 @@ void my_function(int sig) { // can be called asynchronously
 
 int main()
 {
-	printf("RSU Server");
+	printf("RSU Server \n");
 	
 	//01. Open socket for client to connect
 	SocketConnection sc;
 
-	// Create the pipe so we can later fork the porcess 
-	// for intra process communication.
-	int pipeCreation = sc.CreatePipe();
-
-	// Create a thread that blocks whilst reading data from the pipe as this
-	// is a non assigned thread we have no way to clear it up? This will
-	// be the client portion of the fork i.e., pid = 0 (which is invalid).
-	//std::thread readingMsg { sc.ReadPipeToProcessMessage, sc.fileDes[0] };
-
-
 	// This thread is responsible for the actual processing of J2735
 	// Message frames placed onto the queue within ReadPipeToProcessMessage
 	// theoretically, this could be created within the aformentioned function above.
-	//std::thread processQueueMessage{ ProcessQueueMessages };
+	std::thread processQueueMessage{ ProcessQueueMessages };
 
 	// We now create in essence the server side of the process (eventually with fork)
 	// We open a wifi socket and if ok we then need to simply wait for a connection
 	// and push data to the pipe for the pseudo 'client' to process.
-	//int connection = sc.ConnectUsing("IPv4", "", 8888);
-
-	//if (connection == -1) { 
-	//	perror("Client connection ERROR: "); 
-	//	exit(-1);
-	//}
-
-	std::cout << "Client connected...";
-
-	//Start a thread to READ raw bits
-	//std::thread processor = std::thread 
-	//	{ SocketConnection::ReadClient, sc._wifiConnection.socket, sc.fileDes[1]};
-	
+	// Connection error handling is handled within SocketConnection. 
+	std::thread openMultipleConnection = std::thread{ SocketConnection::StartServer };	
+		
 	//Initialise lever sensor and setting pins to INPUT
 	if (Lever_Switch::InitWiringPi() == -1)
 	{
-		std::cout << "WiringPi Lever init failed.";
+		std::cout << "WiringPi Lever init failed. \n";
 		exit(-1);
 	}
 	else 
@@ -119,11 +104,9 @@ int main()
 
 	while (!flag) {
 		//Speed Readings
-		//std::cout << "Client speed reading receive ...";
-		//sc.ReadPipeToProcessMessage(sc.fileDes[0]);
+		sc.ReadPipeToProcessMessage(fileDesGlobal[0]);
 
 		//Start a thread to WAIT TO LISTEN lever click
-		//Lever_Switch::StartLever_A_Reading();
 		if (lever_A_STOP_trigged)
 		{
 			//NOTE: there are two avg readings given from this.
@@ -141,7 +124,7 @@ int main()
 			lever_B_STOP_trigged = false;
 		}
 
-		//cin.get();
+		//std::cin.get();
 	}
 
 	return 0;
