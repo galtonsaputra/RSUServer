@@ -9,22 +9,6 @@ char* transmittingIP;
 
 extern stack<MessageFrame_t*> mystack;
 
-void SocketConnection::ReadClient(int currentActiveSocket, int pipe)
-{
-	uint8_t* rcvBuffer = (uint8_t*)calloc(1, 1024);	
-
-	if (currentActiveSocket != -1) {
-		while (true)
-		{
-			//bits read. packet length size.
-  			int bitsRead = recv(currentActiveSocket, (void*)rcvBuffer, 100, 0);	
-			if (bitsRead != -1 && bitsRead != 0) {
-				write(pipe, rcvBuffer, bitsRead);
-			}
-			else { break; }
-		}
-	}
-}
 
 /*
 	Read the pipe so we can process in-coming messages from the server
@@ -36,7 +20,7 @@ void SocketConnection::ReadPipeToProcessMessage(int pipe)
 	uint8_t* rcvPipeBuffer = (uint8_t*)calloc(1, 1024);
 
 	//Blocking call to wait and read pipe's message
-	int bytesRead = read(pipe, rcvPipeBuffer, 100);
+	int bytesRead = read(pipe, rcvPipeBuffer, 256);
 	MessageFrame_t* msgFrame = 0;
 	asn_dec_rval_t rslt = asn_decode(0, ATS_DER, &asn_DEF_MessageFrame, (void**)&msgFrame, rcvPipeBuffer, bytesRead);
 
@@ -45,7 +29,7 @@ void SocketConnection::ReadPipeToProcessMessage(int pipe)
 		mystack.push(msgFrame);
 	}
 
-	memset(rcvPipeBuffer, 0, 100);
+	memset(rcvPipeBuffer, 0, 256);
 }
 
 //Create a pipe and used for full-duplex

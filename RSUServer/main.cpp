@@ -5,6 +5,8 @@
 
 //TEST STOPWATCH HERE
 #include <chrono>
+//Map
+#include <map>
 
 #include "SocketConnection.h"
 #include "ConcurrentQueue.h"
@@ -14,6 +16,9 @@
 
 #define PORT 8888
 Queue<MessageFrame_t*> MsgQueue;
+
+//<TemporaryID, messageFrame>
+std::map<std::string, long> storeReceivedMessage;
 
 extern int fileDesGlobal[2];
 extern char* transmittingIP;
@@ -51,19 +56,24 @@ void ActivateSpeedSensor()
 void ProcessQueueMessages() {
 
 	char msg[100];
+	char msgReceivedFrom[100];
 
 	while (true) {
 
 		auto item = MsgQueue.pop();
-		memset(msg, 0x32, 100);
+		memset(msg, 0x32, 100);		
 
 		// Process message from queue -> prints
 		switch (item->messageId) {
 			case 20: 
 			{
 				BasicSafetyMessage_t* bsm = &item->value.choice.BasicSafetyMessage;
-				printf("Message received from: %s ...\n",
-					transmittingIP);
+
+				std::string keyIP(bsm->coreData.id.buf, bsm->coreData.id.buf + bsm->coreData.id.size);
+				storeReceivedMessage[keyIP] = bsm->coreData.speed;
+
+				sprintf(msgReceivedFrom, "Message received from: %s ...\n", bsm->coreData.id);
+				printf(msgReceivedFrom);
 				sprintf(msg, "Transmitted speed reading of: %ld\n", bsm->coreData.speed);
 				printf(msg);
 				break;
@@ -71,6 +81,7 @@ void ProcessQueueMessages() {
 
 		}
 		// Free the MessageFrame once we've processed it.
+		// to think how to free when you compare and plug in to equation.
 		ASN_STRUCT_FREE(asn_DEF_MessageFrame, item);
 		memset(msg, 0, 100);
 	}

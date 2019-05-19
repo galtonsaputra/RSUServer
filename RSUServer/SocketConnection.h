@@ -29,18 +29,14 @@ extern Queue<MessageFrame_t*> MsgQueue;
 class SocketConnection
 {
     public:
-		static void ReadPipeToProcessMessage(int pipe);
-		static void ReadClient(int currentActiveSocket, int pipe);
-
 		//Piping
 		int CreatePipe();
 		int fileDes[2];
+
+		static void ReadPipeToProcessMessage(int pipe);
 
 		//Creates a socket, bind and to listen
 		//for multiple incoming client connection.
 		//Able to handle 30 client connected.
 		static void StartServer();
-		char* currentIpTransmitting;
-
-
 };
