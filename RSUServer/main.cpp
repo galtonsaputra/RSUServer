@@ -20,6 +20,7 @@ Queue<MessageFrame_t*> MsgQueue;
 //<TemporaryID, messageFrame>
 std::map<std::string, long> storeReceivedMessage;
 
+//External variable for connection + pipe
 extern int fileDesGlobal[2];
 extern char* transmittingIP;
 
@@ -29,10 +30,17 @@ extern bool lever_B_STOP_trigged;
 extern double elapsedTime_LeverA;
 extern double elapsedTime_LeverB;
 
+//Global verification of speed
+int speedCar_A;
+int speedCar_B;
+
+// set by sig handler
+volatile sig_atomic_t flag = 0;
+
 void ActivateSpeedSensor()
 {
 	VerifySpeed vs;
-	while (true)
+	while (!flag)
 	{
 		if (lever_A_STOP_trigged)
 		{
@@ -40,6 +48,23 @@ void ActivateSpeedSensor()
 			double avgSpeedReadingLeverA = vs.CalculateSpeed(elapsedTime_LeverA);
 			std::cout << "Average speed A: " << avgSpeedReadingLeverA << " cm/s\n";
 
+			//Lever speed 20 (16-24). car speed 12
+			double min = vs.Calculate_LeverReading_DevMin(avgSpeedReadingLeverA);
+			double max = vs.Calculate_LeverReading_DevMax(avgSpeedReadingLeverA);
+			//Verification Check that it falls within this range
+			//if ((min <= speedCar_A) && (speedCar_A >= max)) 
+			//{
+			std::cout.precision(2);
+			std::cout << "Average LEVA minimum: " << min;
+			std::cout << "Average LEVA maximum: " << max;
+				printf("Verified CarOne broadcasted speed. \n Detected at %s, is within normal range. \n", speedCar_A);
+				/*printf("With 5 StdDev and range of min: %d <= detected: %d <= max: %d", min, speedCar_A, max);*/
+
+			//}
+			//else
+			//{
+			//	printf("Bullshit speed reading from Lever A detected!");
+			//}
 			lever_A_STOP_trigged = false;
 		}
 
@@ -47,6 +72,24 @@ void ActivateSpeedSensor()
 		{
 			double avgSpeedReadingLeverB = vs.CalculateSpeed(elapsedTime_LeverB);
 			std::cout << "Average speed B: " << avgSpeedReadingLeverB << " cm/s\n";
+
+			double min = vs.Calculate_LeverReading_DevMin(avgSpeedReadingLeverB);
+			double max = vs.Calculate_LeverReading_DevMax(avgSpeedReadingLeverB);
+
+			//Verification Check that it falls within this range
+			//if ((min <= speedCar_B) && (speedCar_B >= max))
+			//{
+			std::cout.precision(2);
+			std::cout << "Average LEVB minimum: " << min;
+			std::cout << "Average LEVB maximum: " << max;
+			printf("Verified CarOne broadcasted speed. \n Detected at %s, is within normal range. \n", speedCar_A);
+				printf("Verified CarOne broadcasted speed. \n Detected at %d, is within normal range. \n", speedCar_B);
+				//printf("With 5 StdDev and range of min: %d <= detected: %d <= max: %d", min, speedCar_B, max);
+			//}
+			//else
+			//{
+				//printf("Bullshit speed reading from Lever A detected!");
+			//}
 
 			lever_B_STOP_trigged = false;
 		}
@@ -58,8 +101,9 @@ void ProcessQueueMessages() {
 	char msg[100];
 	char msgReceivedFrom[100];
 
-	while (true) {
-
+	while (true) 
+	{
+		// Blocking call to wait for message
 		auto item = MsgQueue.pop();
 		memset(msg, 0x32, 100);		
 
@@ -69,97 +113,164 @@ void ProcessQueueMessages() {
 			{
 				BasicSafetyMessage_t* bsm = &item->value.choice.BasicSafetyMessage;
 
+				//TemporaryID containing IP conversion to string
 				std::string keyIP(bsm->coreData.id.buf, bsm->coreData.id.buf + bsm->coreData.id.size);
 				storeReceivedMessage[keyIP] = bsm->coreData.speed;
-
+				
+				//Message print: Speed received from IP
 				sprintf(msgReceivedFrom, "Message received from: %s ...\n", bsm->coreData.id);
 				printf(msgReceivedFrom);
 				sprintf(msg, "Transmitted speed reading of: %ld\n", bsm->coreData.speed);
 				printf(msg);
+
+				//A - CarOne Bad
+				if (keyIP == "192.168.43.56") 
+				{
+					speedCar_A = bsm->coreData.speed;
+				}
+
+				//B - CarTwo Good
+				else if (keyIP == "192.168.43.212")
+				{
+					speedCar_B = bsm->coreData.speed;
+				}
+
 				break;
 			}
-
 		}
+
 		// Free the MessageFrame once we've processed it.
 		// to think how to free when you compare and plug in to equation.
 		ASN_STRUCT_FREE(asn_DEF_MessageFrame, item);
 		memset(msg, 0, 100);
 	}
+	return;
 }
 
-// set by sig handler
-volatile sig_atomic_t flag = 0;
+//Thread being spawned from Main
+std::thread openMultipleConnection;
+std::thread processQueueMessage;
+std::thread ActivateSensor;
+
+////////////////////
+/*SERVER SHUTDOWN*/
+///////////////////
+/*
+Waits for any input key from user to initiate server shutdown.
+Server shutdown hardware first, the last with client connection
+and with master.
+
+SocketConnection: Thread shutdown must start with a detach(); as join()
+blocks (this)current main thread and wait for select() to return.
+However select() is blocked on receiving activity in master_socket.
+CloseServer() handles this by closing Master_Socket first then its pipe
+fileDesGlobal[0] to trigger activity for select(). Allowing it to break
+and return control back to (this)main process.
+
+Note:
+If a file descriptor being monitored by select() is closed in another
+thread, the result is unspecified. On Linux (and
+some other systems), closing the file descriptor in another thread
+has no effect on select().  In summary, any application that relies
+on a particular behavior in this scenario must be considered buggy.
+*/
+static void onexit(void)
+{
+	printf("SERVER SHUTTING DOWN... \n");
+	flag = 1;
+
+	printf("Cleaning-up ActiveSensor thread\n");
+	ActivateSensor.join();
+
+	printf("Detaching ProcessQueue thread\n");
+	processQueueMessage.detach();
+
+	printf("Closing socket connections. \n");
+	openMultipleConnection.detach();
+	SocketConnection::CloseServer();
+
+	printf("GOODBYE\n");
+}
+
 void my_function(int sig) { // can be called asynchronously
-	flag = 1; // set flag
+	printf("Shutdown command detected. \n");
+	exit(0);
 }
-
 
 int main()
 {
 	SocketConnection sc;
 	printf("RSU Server Controls \n");
 	
-	/*(1) START RSU SERVER HOSTING
+	/** START RSU SERVER HOSTING **
 	Opens RSU server side to process and incoming connection.
 	- Creates and open a wifi socket to wait for a connection at PORT:8888
 	- Manages multiple socket connection [open + close] notification
 	- Starts a pipe to push data to the pipe for thread processQueueMessage to process.
 	- Connection error handling is handled within SocketConnection, exiting immediately before starting any pipe or message read. 
 	. */
-
-	std::thread openMultipleConnection = std::thread{ SocketConnection::StartServer };
-
-	/*(2) PROCESS RECEIVED J2735 MSG
-	This thread is responsible for the actual processing of J2735.
-	Message frames placed onto the queue within ReadPipeToProcessMessage,
-	are decoded through its message.id type and output to console.
-	*/
-	std::thread processQueueMessage{ ProcessQueueMessages };
-		
-	/*(3) INIT LEVER SENSOR
-	Initialise lever sensor and setting pins to INPUT
-	*/
-	if (Lever_Switch::InitWiringPi() == -1)
+	try
 	{
-		std::cout << "WiringPi Lever init failed. \n";
-		exit(-1);
-	}
-	else 
-	{
-		Lever_Switch::SetLeverPin();
+		/*(1) DECODE J2735 MSG FROM PIPE
+		Starts a thread to host 30 connections coming in.
+		Clients are not spawned into new child-thread, using fd_select.
+		Closing of server thread is invoked here, after detach(). 
+		*/
+		openMultipleConnection = std::thread{ SocketConnection::StartServer };
 
-		//LEVER A
-		wiringPiISR(LeverAStart, INT_EDGE_FALLING, &Lever_Switch::StartStopWatch);
-		wiringPiISR(LeverAStop, INT_EDGE_FALLING, &Lever_Switch::StopStopWatch);
-
-		//LEVER B
-		wiringPiISR(LeverBStart, INT_EDGE_FALLING, &Lever_Switch::StartStopWatch_LeverB);
-		wiringPiISR(LeverBStop, INT_EDGE_FALLING, &Lever_Switch::StopStopWatch_LeverB);
-	}
-
-	/*(4) START LEVER THREAD
-	Starts a thread to activate sensors to:
-	- Listen & wait for sensors lever click
-	- Start/Stop stopwatch
-	- Calculate AverageSpeed in cm/s
-	*/
-	std::thread ActivateSensor{ ActivateSpeedSensor };
-
-	//Initialise Lever readings class
-	VerifySpeed vs;
-
-	// Handles CTRL^C for process termination
-	signal(SIGINT, my_function);
-
-	//Main loop
-	while (!flag) 
-	{		
-		/*(5) DECODE J2735 MSG FROM PIPE
+		/*(2) DECODE J2735 MSG FROM PIPE
 		Pipe out received incoming speed messages to J2735 queue
 		*/
-		sc.ReadPipeToProcessMessage(fileDesGlobal[0]);
+		//std::thread readingMsg{ sc.ReadPipeToProcessMessage, fileDesGlobal[0] };
 
-		//std::cin.get();
+		/*(3) PROCESS RECEIVED J2735 MSG
+		This thread is responsible for the actual processing of J2735.
+		Message frames placed onto the queue within ReadPipeToProcessMessage,
+		are decoded through its message.id type and output to console.
+		*/
+		processQueueMessage = std::thread{ ProcessQueueMessages };
+
+		/*(4) INIT LEVER SENSOR
+		Initialise lever sensor and setting pins to INPUT
+		*/
+		if (Lever_Switch::InitWiringPi() == -1)
+		{
+			std::cout << "WiringPi Lever init failed. \n";
+			exit(-1);
+		}
+		else
+		{
+			Lever_Switch::SetLeverPin();
+
+			//LEVER A - CarOne_Bad
+			wiringPiISR(LeverAStart, INT_EDGE_FALLING, &Lever_Switch::StartStopWatch);
+			wiringPiISR(LeverAStop, INT_EDGE_FALLING, &Lever_Switch::StopStopWatch);
+
+
+			//LEVER B - CarTwo_Good
+			wiringPiISR(LeverBStart, INT_EDGE_FALLING, &Lever_Switch::StartStopWatch_LeverB);
+			wiringPiISR(LeverBStop, INT_EDGE_FALLING, &Lever_Switch::StopStopWatch_LeverB);
+		}
+
+		/*(5) START LEVER THREAD
+		Starts a thread to activate sensors to:
+		- Listen & wait for sensors lever click
+		- Start/Stop stopwatch
+		- Calculate AverageSpeed in cm/s
+		*/
+		ActivateSensor = std::thread{ ActivateSpeedSensor };
+
+		signal(SIGINT, my_function);
+		atexit(onexit);
+		while (!flag) 
+		{
+			sc.ReadPipeToProcessMessage(fileDesGlobal[0]);	
+		}
+	}
+
+	catch (...)
+	{
+		perror("ERR:");
 	}
 
 	return 0;

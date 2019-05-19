@@ -1,6 +1,10 @@
 #include "RSU_Server_lever.h"
-
+//Utility class for speed verification calculation
 VerifySpeed vs;
+
+double stdDev = 0.05;
+double devSpeedReadingMax;
+double devSpeedReadingMin;
 
 auto startLever_A_Watch = std::chrono::high_resolution_clock::now();
 auto startLever_B_Watch = std::chrono::high_resolution_clock::now();
@@ -68,7 +72,8 @@ void Lever_Switch::StartLever_A_Reading()
 //LEVER A
 void Lever_Switch::StartStopWatch() 
 {
-	printf("LEVER A - START stopwatch \n");
+	//printf("LEVER A - START stopwatch \n");
+	printf("Lever A start triggered by: 192.168.43.56 \n");
 	auto startWatch = std::chrono::high_resolution_clock::now();
 	startLever_A_Watch = startWatch;
 
@@ -81,7 +86,8 @@ void Lever_Switch::StartStopWatch()
 
 void Lever_Switch::StopStopWatch()
 {
-	printf("LEVER A - STOP stopwatch \n");
+	//printf("LEVER A - STOP stopwatch \n");
+	printf("Lever A stop triggered by: 192.168.43.56 \n");
 	auto stopWatch = std::chrono::high_resolution_clock::now();
 
 	//Calculate elapsed in seconds
@@ -103,7 +109,8 @@ void Lever_Switch::StopStopWatch()
 //LEVERB
 void Lever_Switch::StartStopWatch_LeverB()
 {
-	printf("LEVER B - START stopwatch \n");
+	//printf("LEVER B - START stopwatch \n");
+	printf("Lever B start triggered by: 192.168.43.212 \n");
 	auto startWatch = std::chrono::high_resolution_clock::now();
 	startLever_B_Watch = startWatch;
 
@@ -116,7 +123,8 @@ void Lever_Switch::StartStopWatch_LeverB()
 
 void Lever_Switch::StopStopWatch_LeverB()
 {
-	printf("LEVER B - STOP stopwatch \n");
+	//printf("LEVER B - STOP stopwatch \n");
+	printf("Lever B stop triggered by: 192.168.43.212 \n");
 	auto stopWatch = std::chrono::high_resolution_clock::now();
 
 	//Calculate elapsed in seconds
@@ -139,4 +147,17 @@ double VerifySpeed::CalculateSpeed(double time)
 {
 	double calculatedSpeed = vs.roadDistance / time;
 	return calculatedSpeed;
+}
+
+//To calculate a standard deviation +-5% from lever sensor reading
+double VerifySpeed::Calculate_LeverReading_DevMin(double AvgSpeedLeverReading)
+{
+	double calculateDevFromReading = AvgSpeedLeverReading * (stdDev);
+	return AvgSpeedLeverReading - calculateDevFromReading;
+}
+
+double VerifySpeed::Calculate_LeverReading_DevMax(double AvgSpeedLeverReading)
+{
+	double calculateDevFromReading = AvgSpeedLeverReading * (stdDev);
+	return AvgSpeedLeverReading + calculateDevFromReading;
 }

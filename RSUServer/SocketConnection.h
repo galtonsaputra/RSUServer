@@ -33,10 +33,8 @@ class SocketConnection
 		int CreatePipe();
 		int fileDes[2];
 
-		static void ReadPipeToProcessMessage(int pipe);
+		void ReadPipeToProcessMessage(int pipe);
 
-		//Creates a socket, bind and to listen
-		//for multiple incoming client connection.
-		//Able to handle 30 client connected.
 		static void StartServer();
+		static void CloseServer();
 };

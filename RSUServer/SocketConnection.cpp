@@ -1,4 +1,5 @@
 #include "SocketConnection.h"
+#include <signal.h>
 
 #define TRUE 1 
 #define FALSE 0 
@@ -8,7 +9,8 @@ int fileDesGlobal[2];
 char* transmittingIP;
 
 extern stack<MessageFrame_t*> mystack;
-
+// set by sig handler
+extern volatile sig_atomic_t flag;
 
 /*
 	Read the pipe so we can process in-coming messages from the server
@@ -21,6 +23,9 @@ void SocketConnection::ReadPipeToProcessMessage(int pipe)
 
 	//Blocking call to wait and read pipe's message
 	int bytesRead = read(pipe, rcvPipeBuffer, 256);
+	if (bytesRead == -1) {
+		return;
+	}
 	MessageFrame_t* msgFrame = 0;
 	asn_dec_rval_t rslt = asn_decode(0, ATS_DER, &asn_DEF_MessageFrame, (void**)&msgFrame, rcvPipeBuffer, bytesRead);
 
@@ -41,12 +46,21 @@ int SocketConnection::CreatePipe()
 	return 0;
 }
 
+int max_sd;
+int master_socket;
+
+void SocketConnection::CloseServer()
+{
+	close(master_socket);
+	close(fileDesGlobal[0]);
+}
+
 void SocketConnection::StartServer()
 {
 	int opt = TRUE;
-	int master_socket, addrlen, new_socket, client_socket[30],
+	int addrlen, new_socket, client_socket[30],
 		max_clients = 30, activity, i, valread, sd;
-	int max_sd;
+
 	struct sockaddr_in address;
 	char buffer[1025];
 
@@ -60,8 +74,6 @@ void SocketConnection::StartServer()
 	{
 		perror("Pipe creation error: \n");
 	}
-
-	std::thread readingMsg { socketConnection.ReadPipeToProcessMessage, socketConnection.fileDes[0] };
 
 	//initialise all client_socket[] to 0 so not checked 
 	for (i = 0; i < max_clients; i++)
@@ -109,7 +121,7 @@ void SocketConnection::StartServer()
 	addrlen = sizeof(address);
 	puts("Waiting for client connections ...");
 
-	while (true)
+	while (!flag)
 	{
 		//clear the socket set 
 		FD_ZERO(&readfds);
@@ -136,6 +148,11 @@ void SocketConnection::StartServer()
 		//wait for an activity on one of the sockets , timeout is NULL , 
 		//so wait indefinitely 
 		activity = select(max_sd + 1, &readfds, NULL, NULL, NULL);
+
+		if (activity == -1) 
+		{
+			break;
+		}
 
 		if ((activity < 0) && (errno != EINTR))
 		{
@@ -200,4 +217,6 @@ void SocketConnection::StartServer()
 			}
 		}
 	}
+
+	return;
 }

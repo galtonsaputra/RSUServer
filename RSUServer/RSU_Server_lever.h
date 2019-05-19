@@ -44,6 +44,8 @@ class VerifySpeed
 		double elapsedTime;
 		//Calculate speed to cm/seconds
 		double CalculateSpeed(double time);
+		double Calculate_LeverReading_DevMin(double AvgSpeedLeverReading);
+		double Calculate_LeverReading_DevMax(double AvgSpeedLeverReading);
 		
 	private:
 		//Road length is tested at 100cm
