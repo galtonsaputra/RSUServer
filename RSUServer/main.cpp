@@ -49,7 +49,6 @@ void ActivateSpeedSensor()
 	{
 		if (lever_A_STOP_trigged)
 		{
-			//NOTE: there are two avg readings given from this.
 			double avgSpeedReadingLeverA = vs.CalculateSpeed(elapsedTime_LeverA);
 			std::cout << "Average speed A: " << avgSpeedReadingLeverA << " cm/s\n";
 
@@ -58,8 +57,8 @@ void ActivateSpeedSensor()
 			double max = vs.Calculate_LeverReading_DevMax(avgSpeedReadingLeverA);
 			
 			std::cout.precision(2);
-			std::cout << "Range (-10%) Lev_A minimum: " << min << "\n";
-			std::cout << "Range (+10%) Lev_A maximum: " << max << "\n";
+			//std::cout << "Range (-10%) Lev_A minimum: " << min << "\n";
+			//std::cout << "Range (+10%) Lev_A maximum: " << max << "\n";
 			
 			//Verification Check that it falls within this range
 			if (isSpeedinRange(min, max, speedCar_A))
@@ -73,12 +72,14 @@ void ActivateSpeedSensor()
 			}
 			else
 			{
-				printf("CarOne speed is mismatching with speed sensor. Tagging vehicle as bad actor. \n");
+				printf("CarOne speed is MISMATCH with speed sensor. \n");
+				printf("Where broadcasted BSM-Speed of vehicle: %dcm/s \n", speedCar_A);
+				printf("Tagging and initiating bad actor protocol... \n");
 			}
 			
 			lever_A_STOP_trigged = false;
 		}
-
+		//B is good
 		else if (lever_B_STOP_trigged)
 		{
 			double avgSpeedReadingLeverB = vs.CalculateSpeed(elapsedTime_LeverB);
@@ -94,7 +95,7 @@ void ActivateSpeedSensor()
 			//Verification Check that it falls within this range
 			if (isSpeedinRange(min, max, speedCar_B))
 			{
-				printf("Detected speed of CarTwo: %d cm/sec is within normal range. \n", speedCar_A);
+				printf("Detected speed of CarTwo: %d cm/sec is within normal range. \n", speedCar_B);
 				printf("CarTwo speed VERIFIFED! \n");
 			}
 			else if (speedCar_B == 0)
@@ -103,7 +104,9 @@ void ActivateSpeedSensor()
 			}
 			else
 			{
-				printf("CarTwo speed is mismatching with speed sensor. Tagging vehicle as bad actor. \n");
+				printf("CarTwo speed is MISMATCH with speed sensor. \n");
+				printf("Broadcasted BSM-Speed of vehicle: %dcm/s \n", speedCar_B);
+				printf("Tagging and initiating bad actor protocol... \n");
 			}
 
 			lever_B_STOP_trigged = false;
@@ -133,10 +136,10 @@ void ProcessQueueMessages() {
 				storeReceivedMessage[keyIP] = bsm->coreData.speed;
 				
 				//Message print: Speed received from IP
-				sprintf(msgReceivedFrom, "Message received from: %s ...\n", bsm->coreData.id);
-				printf(msgReceivedFrom);
-				sprintf(msg, "Transmitted speed reading of: %ld\n", bsm->coreData.speed);
-				printf(msg);
+				//sprintf(msgReceivedFrom, "Message received from: %s ...\n", bsm->coreData.id);
+				//printf(msgReceivedFrom);
+				//sprintf(msg, "Transmitted speed reading of: %ld\n", bsm->coreData.speed);
+				//printf(msg);
 
 				//A - CarOne Bad
 				if (keyIP == "192.168.43.52") 
