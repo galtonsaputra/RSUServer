@@ -37,6 +37,11 @@ int speedCar_B;
 // set by sig handler
 volatile sig_atomic_t flag = 0;
 
+bool isSpeedinRange(unsigned rangeLow, unsigned rangeHigh, unsigned variable)
+{
+	return  ((variable - rangeLow) <= (rangeHigh - rangeLow));
+}
+
 void ActivateSpeedSensor()
 {
 	VerifySpeed vs;
@@ -51,45 +56,55 @@ void ActivateSpeedSensor()
 			//Lever speed 20 (16-24). car speed 12
 			double min = vs.Calculate_LeverReading_DevMin(avgSpeedReadingLeverA);
 			double max = vs.Calculate_LeverReading_DevMax(avgSpeedReadingLeverA);
-			//Verification Check that it falls within this range
-			//if ((min <= speedCar_A) && (speedCar_A >= max)) 
-			//{
+			
 			std::cout.precision(2);
-			std::cout << "Average LEVA minimum: " << min;
-			std::cout << "Average LEVA maximum: " << max;
-				printf("Verified CarOne broadcasted speed. \n Detected at %s, is within normal range. \n", speedCar_A);
-				/*printf("With 5 StdDev and range of min: %d <= detected: %d <= max: %d", min, speedCar_A, max);*/
-
-			//}
-			//else
-			//{
-			//	printf("Bullshit speed reading from Lever A detected!");
-			//}
+			std::cout << "Range (-10%) Lev_A minimum: " << min << "\n";
+			std::cout << "Range (+10%) Lev_A maximum: " << max << "\n";
+			
+			//Verification Check that it falls within this range
+			if (isSpeedinRange(min, max, speedCar_A))
+			{				
+				printf("Detected speed of CarOne: %d cm/sec is within normal range. \n", speedCar_A);
+				printf("CarOne speed VERIFIFED! \n");
+			}
+			else if (speedCar_A == 0) 
+			{
+				printf("No speed reading received from CarOne... \n");
+			}
+			else
+			{
+				printf("CarOne speed is mismatching with speed sensor. Tagging vehicle as bad actor. \n");
+			}
+			
 			lever_A_STOP_trigged = false;
 		}
 
 		else if (lever_B_STOP_trigged)
 		{
 			double avgSpeedReadingLeverB = vs.CalculateSpeed(elapsedTime_LeverB);
-			std::cout << "Average speed B: " << avgSpeedReadingLeverB << " cm/s\n";
+			std::cout << "Average speed B: " << avgSpeedReadingLeverB << " cm/s \n";
 
 			double min = vs.Calculate_LeverReading_DevMin(avgSpeedReadingLeverB);
 			double max = vs.Calculate_LeverReading_DevMax(avgSpeedReadingLeverB);
 
-			//Verification Check that it falls within this range
-			//if ((min <= speedCar_B) && (speedCar_B >= max))
-			//{
 			std::cout.precision(2);
-			std::cout << "Average LEVB minimum: " << min;
-			std::cout << "Average LEVB maximum: " << max;
-			printf("Verified CarOne broadcasted speed. \n Detected at %s, is within normal range. \n", speedCar_A);
-				printf("Verified CarOne broadcasted speed. \n Detected at %d, is within normal range. \n", speedCar_B);
-				//printf("With 5 StdDev and range of min: %d <= detected: %d <= max: %d", min, speedCar_B, max);
-			//}
-			//else
-			//{
-				//printf("Bullshit speed reading from Lever A detected!");
-			//}
+			std::cout << "Range (-10%) Lev_B minimum: " << min << "\n";
+			std::cout << "Range (+10%) Lev_B maximum: " << max << "\n";
+
+			//Verification Check that it falls within this range
+			if (isSpeedinRange(min, max, speedCar_B))
+			{
+				printf("Detected speed of CarTwo: %d cm/sec is within normal range. \n", speedCar_A);
+				printf("CarTwo speed VERIFIFED! \n");
+			}
+			else if (speedCar_B == 0)
+			{
+				printf("No speed reading received from CarTwo... \n");
+			}
+			else
+			{
+				printf("CarTwo speed is mismatching with speed sensor. Tagging vehicle as bad actor. \n");
+			}
 
 			lever_B_STOP_trigged = false;
 		}
@@ -124,7 +139,7 @@ void ProcessQueueMessages() {
 				printf(msg);
 
 				//A - CarOne Bad
-				if (keyIP == "192.168.43.56") 
+				if (keyIP == "192.168.43.52") 
 				{
 					speedCar_A = bsm->coreData.speed;
 				}
@@ -193,14 +208,14 @@ static void onexit(void)
 }
 
 void my_function(int sig) { // can be called asynchronously
-	printf("Shutdown command detected. \n");
+	printf("\n Shutdown command detected. \n");
 	exit(0);
 }
 
 int main()
 {
 	SocketConnection sc;
-	printf("RSU Server Controls \n");
+	printf("RSU Server Control \n");
 	
 	/** START RSU SERVER HOSTING **
 	Opens RSU server side to process and incoming connection.

@@ -2,7 +2,7 @@
 //Utility class for speed verification calculation
 VerifySpeed vs;
 
-double stdDev = 0.05;
+double stdDev = 0.1;
 double devSpeedReadingMax;
 double devSpeedReadingMin;
 
@@ -87,7 +87,7 @@ void Lever_Switch::StartStopWatch()
 void Lever_Switch::StopStopWatch()
 {
 	//printf("LEVER A - STOP stopwatch \n");
-	printf("Lever A stop triggered by: 192.168.43.56 \n");
+	printf("Lever A stop triggered by: 192.168.43.52 \n");
 	auto stopWatch = std::chrono::high_resolution_clock::now();
 
 	//Calculate elapsed in seconds
