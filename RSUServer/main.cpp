@@ -47,10 +47,11 @@ void ActivateSpeedSensor()
 	VerifySpeed vs;
 	while (!flag)
 	{
+		//A is good
 		if (lever_A_STOP_trigged)
 		{
 			double avgSpeedReadingLeverA = vs.CalculateSpeed(elapsedTime_LeverA);
-			std::cout << "Average speed A: " << avgSpeedReadingLeverA << " cm/s\n";
+			std::cout << "Average speed A: " << avgSpeedReadingLeverA << " cm/s" << endl;
 
 			//Lever speed 20 (16-24). car speed 12
 			double min = vs.Calculate_LeverReading_DevMin(avgSpeedReadingLeverA);
@@ -63,39 +64,39 @@ void ActivateSpeedSensor()
 			//Verification Check that it falls within this range
 			if (isSpeedinRange(min, max, speedCar_A))
 			{				
-				printf("Detected speed of CarOne: %d cm/sec is within normal range. \n", speedCar_A);
+				printf("Speed of CarA: %d cm/sec is within normal range. \n", speedCar_A);
 				printf("CarOne speed VERIFIFED! \n");
 			}
 			else if (speedCar_A == 0) 
 			{
 				printf("No speed reading received from CarOne... \n");
 			}
-			else
-			{
-				printf("CarOne speed is MISMATCH with speed sensor. \n");
-				printf("Where broadcasted BSM-Speed of vehicle: %dcm/s \n", speedCar_A);
-				printf("Tagging and initiating bad actor protocol... \n");
-			}
+			//else
+			//{
+			//	printf("CarOne speed is MISMATCH with speed sensor. \n");
+			//	printf("Where broadcasted BSM-Speed of vehicle: %dcm/s \n", speedCar_A);
+			//	printf("Tagging and initiating bad actor protocol... \n");
+			//}
 			
 			lever_A_STOP_trigged = false;
 		}
-		//B is good
+		//B is BAD
 		else if (lever_B_STOP_trigged)
 		{
 			double avgSpeedReadingLeverB = vs.CalculateSpeed(elapsedTime_LeverB);
-			std::cout << "Average speed B: " << avgSpeedReadingLeverB << " cm/s \n";
+			std::cout << "Average speed B: " << avgSpeedReadingLeverB << " cm/s" << endl;
 
 			double min = vs.Calculate_LeverReading_DevMin(avgSpeedReadingLeverB);
 			double max = vs.Calculate_LeverReading_DevMax(avgSpeedReadingLeverB);
 
 			std::cout.precision(2);
-			std::cout << "Range (-10%) Lev_B minimum: " << min << "\n";
-			std::cout << "Range (+10%) Lev_B maximum: " << max << "\n";
+			//std::cout << "Range (-10%) Lev_B minimum: " << min << "\n";
+			//std::cout << "Range (+10%) Lev_B maximum: " << max << "\n";
 
 			//Verification Check that it falls within this range
 			if (isSpeedinRange(min, max, speedCar_B))
 			{
-				printf("Detected speed of CarTwo: %d cm/sec is within normal range. \n", speedCar_B);
+				printf("Speed of CarB: %d cm/sec is within normal range. \n", speedCar_B);	
 				printf("CarTwo speed VERIFIFED! \n");
 			}
 			else if (speedCar_B == 0)
@@ -104,7 +105,7 @@ void ActivateSpeedSensor()
 			}
 			else
 			{
-				printf("CarTwo speed is MISMATCH with speed sensor. \n");
+				printf("CarB speed is MISMATCH with speed sensor. \n");
 				printf("Broadcasted BSM-Speed of vehicle: %dcm/s \n", speedCar_B);
 				printf("Tagging and initiating bad actor protocol... \n");
 			}
@@ -141,14 +142,14 @@ void ProcessQueueMessages() {
 				//sprintf(msg, "Transmitted speed reading of: %ld\n", bsm->coreData.speed);
 				//printf(msg);
 
-				//A - CarOne Bad
-				if (keyIP == "192.168.43.52") 
+				//A - CarOne GOOD
+				if (keyIP == "192.168.43.212") 
 				{
 					speedCar_A = bsm->coreData.speed;
 				}
 
-				//B - CarTwo Good
-				else if (keyIP == "192.168.43.212")
+				//B - CarTwo BAD
+				else if (keyIP == "192.168.43.52")
 				{
 					speedCar_B = bsm->coreData.speed;
 				}
@@ -210,7 +211,7 @@ static void onexit(void)
 	printf("GOODBYE\n");
 }
 
-void my_function(int sig) { // can be called asynchronously
+void interruptCommand(int sig) { // can be called asynchronously
 	printf("\n Shutdown command detected. \n");
 	exit(0);
 }
@@ -236,19 +237,14 @@ int main()
 		*/
 		openMultipleConnection = std::thread{ SocketConnection::StartServer };
 
-		/*(2) DECODE J2735 MSG FROM PIPE
-		Pipe out received incoming speed messages to J2735 queue
-		*/
-		//std::thread readingMsg{ sc.ReadPipeToProcessMessage, fileDesGlobal[0] };
-
-		/*(3) PROCESS RECEIVED J2735 MSG
+		/*(2) PROCESS RECEIVED J2735 MSG
 		This thread is responsible for the actual processing of J2735.
 		Message frames placed onto the queue within ReadPipeToProcessMessage,
 		are decoded through its message.id type and output to console.
 		*/
 		processQueueMessage = std::thread{ ProcessQueueMessages };
 
-		/*(4) INIT LEVER SENSOR
+		/*(3) INIT LEVER SENSOR
 		Initialise lever sensor and setting pins to INPUT
 		*/
 		if (Lever_Switch::InitWiringPi() == -1)
@@ -270,7 +266,7 @@ int main()
 			wiringPiISR(LeverBStop, INT_EDGE_FALLING, &Lever_Switch::StopStopWatch_LeverB);
 		}
 
-		/*(5) START LEVER THREAD
+		/*(4) START LEVER THREAD
 		Starts a thread to activate sensors to:
 		- Listen & wait for sensors lever click
 		- Start/Stop stopwatch
@@ -278,10 +274,13 @@ int main()
 		*/
 		ActivateSensor = std::thread{ ActivateSpeedSensor };
 
-		signal(SIGINT, my_function);
+		signal(SIGINT, interruptCommand);
 		atexit(onexit);
 		while (!flag) 
 		{
+			/*(5) DECODE J2735 MSG FROM PIPE
+			Pipe out received incoming speed messages to J2735 queue
+			*/
 			sc.ReadPipeToProcessMessage(fileDesGlobal[0]);	
 		}
 	}

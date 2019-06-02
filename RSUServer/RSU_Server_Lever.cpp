@@ -73,7 +73,7 @@ void Lever_Switch::StartLever_A_Reading()
 void Lever_Switch::StartStopWatch() 
 {
 	//printf("LEVER A - START stopwatch \n");
-	printf("Lever A start triggered by: 192.168.43.56 \n");
+	printf("Lever A start triggered by: 192.168.43.212 \n");
 	auto startWatch = std::chrono::high_resolution_clock::now();
 	startLever_A_Watch = startWatch;
 
@@ -87,7 +87,7 @@ void Lever_Switch::StartStopWatch()
 void Lever_Switch::StopStopWatch()
 {
 	//printf("LEVER A - STOP stopwatch \n");
-	printf("Lever A stop triggered by: 192.168.43.52 \n");
+	printf("Lever A stop triggered by: 192.168.43.212 \n");
 	auto stopWatch = std::chrono::high_resolution_clock::now();
 
 	//Calculate elapsed in seconds
@@ -110,7 +110,7 @@ void Lever_Switch::StopStopWatch()
 void Lever_Switch::StartStopWatch_LeverB()
 {
 	//printf("LEVER B - START stopwatch \n");
-	printf("Lever B start triggered by: 192.168.43.212 \n");
+	printf("Lever B start triggered by: 192.168.43.52 \n");
 	auto startWatch = std::chrono::high_resolution_clock::now();
 	startLever_B_Watch = startWatch;
 
@@ -124,7 +124,7 @@ void Lever_Switch::StartStopWatch_LeverB()
 void Lever_Switch::StopStopWatch_LeverB()
 {
 	//printf("LEVER B - STOP stopwatch \n");
-	printf("Lever B stop triggered by: 192.168.43.212 \n");
+	printf("Lever B stop triggered by: 192.168.43.52 \n");
 	auto stopWatch = std::chrono::high_resolution_clock::now();
 
 	//Calculate elapsed in seconds
