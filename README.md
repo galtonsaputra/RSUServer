@@ -1,31 +1,57 @@
 # RSU Server
 
 ### Description:
-This solution provides an independent verification framework inspecting connected vehicle's broadcasted Basic Safety Messages. It inspects and verifies the speed field within the BSM structure and check its validity. Below proposes a J2735 message content inspector and speed verification framework. 
+This solution provides an independent verification framework inspecting connected vehicle's broadcasted Basic Safety Messages. It inspects and verifies the speed field within the BSM structure and cross-check speed's field validity against its independent sensor readings. Below proposes a J2735 message content inspector and speed verification framework. 
 
-#### Demonstrator
-
+## Demonstrator 
 RSU Server was tested and developed using the following materials:
 
-**Physical RSU**
+### RSU Server
+**Physical PI** 
 * Raspberry Pi 3 Model B+
 * 1 x 32GB MicroSD etched with Raspian Stretch [Kernel version: 4.14]
 * 4 x SPDT 3A micro switch with lever wired to RPi GPIO pins
+* GCC [v1.14]
 
-**RSU Server Testbed**
+**Software Components**
+- Visual Studio 2017
+- WiringPi
+- Etcher
 
-Two 2 medium-density fibreboards (MDF) was installed with four SPDT microswitches and connected to a RaspberryPi, the testbed has the following dimensions
+### RSU Server TestBed
+Two (2) medium-density fibreboards (MDF) was installed with four SPDT microswitches wired to a RaspberryPi, the testbed has the following dimensions: W: 45cm, L: 150cm </br>
 
-W: 45cm
-L: 150cm
+The demonstrator with the above requirements delivers the following capabilities:
+- RSU able to receive and transmit J2735 message using RPi wireless capabilities 802.11ac [802.11ac/b/g/n] (depending on its model)
+- Able to independently verify broadcasted speed field of a BSM within a messageframe using independent speed sensor in the form of lever click.
+- SPDT microswitch levers are the speed sensors calculating elapsed time.
+- 2 SPDT switches (1-trigger startTime and 1-trigger endTime) gives 1 average speed reading.
+- Distance is a fixed length of 100cm and using DTS (Distance / Time * Speed) to obtain average speed reading.
+- Independent speed sensor readings have a standard deviation of +- 5% for each cross check
+- If broadcasted speed readings does not match independent speed sensor readings, the vehicle is tagged as a bad actor. 
+
+### Demonstrator's limitation
+- Does not utilise 802.11p and does not fully conform to 1609
+- Bad speed reading does not translate to being a bad vehicle being tagged. 
 
 
 
-- Receive and transmit BSM using J2735 protocol and 802.11ac
-
-*RSU server starts by opening a port and listens for incoming Raspberry Pi's wireless request [802.11ac/b/g/n] (depending on its model) and serves as a communication hub for connected vehicles with this server. It also 
+## Installing
+Once the above have been wired and the code have been compiled to the RaspberryPi  
+- RSU server starts by opening a port and listens for incoming Raspberry Pi's wireless request and serves as a communication hub for connected vehicles with this server. 
 
 *It has 2 independent sensor connected to verify its speedrepresented  
 It inspects J2735 - BSM safety messages and verifies its speed field against broadcasted
 
+
+## Running the code
+1. Open terminal
+2. Paste the following code to the terminal
+```Linux cmd
+cd /user/project/RSUServer/RSUServer/bin/RSUServer
+```
+3. To run the server, paste the following:
+```Linux cmd
+sudo RSUServer.out
+```
 
