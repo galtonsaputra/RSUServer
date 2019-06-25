@@ -1,7 +1,13 @@
 # RSU Server
 
 ### Description:
-This solution provides an independent verification framework inspecting connected vehicle's broadcasted Basic Safety Messages. It inspects and verifies the speed field within the BSM structure and cross-check speed's field validity against its independent sensor readings. Below proposes a J2735 message content inspector and speed verification framework. 
+This solution provides an independent verification framework inspecting connected vehicle's broadcasted Basic Safety Messages within a J2735 MessageFrame. It inspects and verifies the speed field within the BSM structure and cross-check speed's field validity against its independent sensor readings. Below proposes a J2735 message content inspector and speed verification framework. 
+
+#### Table of Contents
+RSUServer Demonstrator
+RSUServer Initial Config
+Running the code
+Wiring Diagram
 
 ## Demonstrator 
 ### RSU Server
@@ -10,7 +16,7 @@ RSU Server was tested and developed using the following materials:</br>
 * Raspberry Pi 3 Model B+
 * 1 x 32GB MicroSD etched with Raspian Stretch [Kernel version: 4.14]
 * 4 x SPDT 3A micro switch with lever wired to RPi GPIO pins
-* GCC [v1.14]
+* gcc [v6.3.0]
 
 **Software Components**
 - Visual Studio 2017
@@ -18,13 +24,13 @@ RSU Server was tested and developed using the following materials:</br>
 - Etcher
 
 ### RSU Server TestBed
-Two (2) medium-density fibreboards (MDF) was installed with four SPDT microswitches wired to a RaspberryPi, the testbed has the following dimensions: W: 45cm x L: 150cm
+Two (2) medium-density fibreboards (MDF) installed with four (4) SPDT microswitches and wired to a RaspberryPi. This testbed has the following dimensions: W: 45cm x L: 150cm
 
 The demonstrator with the above requirements delivers the following capabilities:
 - RSU able to receive and transmit J2735 message using RPi wireless capabilities 802.11ac [802.11ac/b/g/n] (depending on its model)
 - Able to independently verify broadcasted speed field of a BSM within a messageframe using independent speed sensor in the form of lever click.
-- SPDT microswitch levers are the speed sensors calculating elapsed time.
-- 2 SPDT switches (1-trigger startTime and 1-trigger endTime) gives 1 average speed reading.
+- SPDT microswitch levers represents independent speed sensors to calculate time in seconds.
+- 2 SPDT switches (1-trigger startTime and 1-trigger endTime) gives 1 average speed reading (cm/s).
 - Distance is a fixed length of 100cm and using DTS (Distance / Time * Speed) to obtain average speed reading.
 - Independent speed sensor readings have a standard deviation of +- 5% for each cross check
 - If broadcasted speed readings does not match independent speed sensor readings, the vehicle is tagged as a bad actor. 
@@ -47,13 +53,15 @@ gpio readall
 
 
 ## Running the code
-1. Open terminal
-2. Paste the following code to the terminal
+1. Open Terminal
+2. Paste the following code to navigate:
 ```Linux cmd
-cd /user/project/RSUServer/RSUServer/bin/RSUServer
+cd /home/pi/projects/RSUServer/bin/ARM/Debug/RSUServer.out
+```
+```
+Note: The above navigation path is using VS Cross Platform Manager and where it builds and outputs to. 
 ```
 3. To run the server, paste the following:
 ```Linux cmd
 sudo RSUServer.out
 ```
-
