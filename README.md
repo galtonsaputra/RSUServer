@@ -11,7 +11,8 @@ Wiring Diagram
 
 ## Demonstrator 
 ### RSU Server</br>
-RSU Server was tested and developed using the following materials:
+RSU Server was tested and developed using the following materials: 
+
 **Physical PI** 
 * Raspberry Pi 3 Model B+
 * 1 x 32GB MicroSD etched with Raspian Stretch [Kernel version: 4.14]
@@ -24,21 +25,21 @@ RSU Server was tested and developed using the following materials:
 - Etcher
 
 ### RSU Server TestBed
-Two (2) medium-density fibreboards (MDF) installed with four (4) SPDT microswitches and wired to a RaspberryPi. This testbed has the following dimensions: W: 45cm x L: 150cm
+Two (2) medium-density fibreboards (MDF) installed with four (4) SPDT microswitches and wired to a RaspberryPi.</br> This testbed has the following dimensions: W: 45cm x L: 150cm.
 
-The demonstrator with the above requirements delivers the following capabilities:
-- RSU able to receive and transmit J2735 message using RPi wireless capabilities 802.11ac [802.11ac/b/g/n] (depending on its model)
+The demonstrator with the above requirements deliver the following capabilities:
+- RSU-S is able to receive and transmit J2735 message using RPi wireless capabilities 802.11ac [802.11ac/b/g/n] (depending on its model).
 - Able to independently verify broadcasted speed field of a BSM within a messageframe using independent speed sensor in the form of lever click.
 - SPDT microswitch levers represents independent speed sensors to calculate time in seconds.
 - 2 SPDT switches (1-trigger startTime and 1-trigger endTime) gives 1 average speed reading (cm/s).
 - Distance is a fixed length of 100cm and using DTS (Distance / Time * Speed) to obtain average speed reading.
-- Independent speed sensor readings have a standard deviation of +- 5% for each cross check
+- Independent speed sensor readings have a standard deviation of (+-) 5% for each speed readings.
 - If broadcasted speed readings does not match independent speed sensor readings, the vehicle is tagged as a bad actor. 
 
 ### Demonstrator's limitation
-- Does not utilise 802.11p and does not fully conform to 1609
-- Bad speed reading does not translate to being a bad vehicle being tagged. 
-- Inspecting only J2735 - BSM safety messages and verifying its speed field against independent sensor readings
+- Does not utilise 802.11p and does not conform to IEEE1609 Family of Standards.
+- Bad speed reading does not mean a vehicle is a bad actor (e.g. faulty sensor).
+- Inspecting only J2735 - BSM safety messages and verifying its speed field against independent sensor readings.
 
 
 
@@ -54,10 +55,10 @@ gpio readall
 
 ## Running the code
 1. Open Terminal
-2. Paste the following code to navigate:
+2. Paste the following code to navigate: </br>
+The above navigation path is using VS Cross-Platform Manager and where it builds and outputs to. 
 ```Linux cmd
 cd /home/pi/projects/RSUServer/bin/ARM/Debug/RSUServer.out
-//The above navigation path is using VS Cross Platform Manager and where it builds and outputs to. 
 ```
 3. To run the server, paste the following:
 ```Linux cmd
