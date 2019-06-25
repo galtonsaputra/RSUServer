@@ -4,10 +4,10 @@
 This solution provides an independent verification framework inspecting connected vehicle's broadcasted Basic Safety Messages within a J2735 MessageFrame. It inspects and verifies the speed field within the BSM structure and cross-check speed's field validity against its independent sensor readings. Below proposes a J2735 message content inspector and speed verification framework. 
 
 #### Table of Contents
-RSUServer Demonstrator
-RSUServer Initial Config
-Running the code
-Wiring Diagram
+RSUServer Demonstrator </br>
+RSUServer Initial Config </br>
+Running the code </br>
+Wiring Diagram </br>
 
 ## Demonstrator 
 ### RSU Server</br>
@@ -55,8 +55,8 @@ gpio readall
 
 ## Running the code
 1. Open Terminal
-2. Paste the following code to navigate: </br>
-The above navigation path is using VS Cross-Platform Manager and where it builds and outputs to. 
+2. Navigate to the directory where your build outputs to. </br>
+The below navigation path is using VS Cross-Platform Manager and where it builds and outputs to. 
 ```Linux cmd
 cd /home/pi/projects/RSUServer/bin/ARM/Debug/RSUServer.out
 ```
