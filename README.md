@@ -10,8 +10,8 @@ Running the code
 Wiring Diagram
 
 ## Demonstrator 
-### RSU Server
-RSU Server was tested and developed using the following materials:</br>
+### RSU Server</br>
+RSU Server was tested and developed using the following materials:
 **Physical PI** 
 * Raspberry Pi 3 Model B+
 * 1 x 32GB MicroSD etched with Raspian Stretch [Kernel version: 4.14]
@@ -57,9 +57,7 @@ gpio readall
 2. Paste the following code to navigate:
 ```Linux cmd
 cd /home/pi/projects/RSUServer/bin/ARM/Debug/RSUServer.out
-```
-```
-Note: The above navigation path is using VS Cross Platform Manager and where it builds and outputs to. 
+//The above navigation path is using VS Cross Platform Manager and where it builds and outputs to. 
 ```
 3. To run the server, paste the following:
 ```Linux cmd
