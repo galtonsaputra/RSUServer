@@ -5,7 +5,7 @@ This solution provides an independent verification framework inspecting connecte
 
 ## Demonstrator 
 ### RSU Server
-RSU Server was tested and developed using the following materials:
+RSU Server was tested and developed using the following materials:</br>
 **Physical PI** 
 * Raspberry Pi 3 Model B+
 * 1 x 32GB MicroSD etched with Raspian Stretch [Kernel version: 4.14]
@@ -40,9 +40,9 @@ The demonstrator with the above requirements delivers the following capabilities
 Once the above have been wired and the code have been compiled to the RaspberryPi, please check the following server configuration:</br>
 - RSU server starts by opening and listening on PORT: 8080
 - To obtain GPIO pin mapping and its state, please run
-'''Linux cmd
+```Linux cmd
 gpio readall
-'''
+```
 - Please note that the pin number specified at code, mapps to WiringPi numbering (WPi). Additionally, running the above code will also gives you a Broadcom representation of the pins. 
 
 
