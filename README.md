@@ -3,12 +3,6 @@
 ### Description:
 This solution provides an independent verification framework inspecting connected vehicle's broadcasted Basic Safety Messages within a J2735 MessageFrame. It inspects and verifies the speed field within the BSM structure and cross-check speed's field validity against its independent sensor readings. Below proposes a J2735 message content inspector and speed verification framework. 
 
-#### Table of Contents
-RSUServer Demonstrator </br>
-RSUServer Initial Config </br>
-Running the code </br>
-Wiring Diagram </br>
-
 ## Demonstrator 
 ### RSU Server</br>
 RSU Server was tested and developed using the following materials: 
@@ -40,8 +34,6 @@ The demonstrator with the above requirements deliver the following capabilities:
 - Does not utilise 802.11p and does not conform to IEEE1609 Family of Standards.
 - Bad speed reading does not mean a vehicle is a bad actor (e.g. faulty sensor).
 - Inspecting only J2735 - BSM safety messages and verifying its speed field against independent sensor readings.
-
-
 
 ## Initial Config
 Once the above have been wired and the code have been compiled to the RaspberryPi, please check the following server configuration:</br>
