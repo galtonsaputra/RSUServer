@@ -42,7 +42,7 @@ Once the above have been wired and the code have been compiled to the RaspberryP
 ```Linux cmd
 gpio readall
 ```
-- Please note that the pin number specified at code, mapps to WiringPi numbering (WPi). Additionally, running the above code will also gives you a Broadcom representation of the pins. 
+- Please note that the pin number specified at code, maps to WiringPi numbering (WPi). Additionally, running the above code will also gives you a Broadcom representation of the pins. 
 
 
 ## Running the code
